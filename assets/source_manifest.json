@@ -1,0 +1,11 @@
+{
+  "version": 1,
+  "note": "No external clinical dataset or model is bundled in this baseline. The two local cases are hand-written toy examples for software checks, not medical validation data.",
+  "assets": [
+    {
+      "path": "simulator/sample_cases.json",
+      "origin": "Project-authored synthetic examples",
+      "license": "Project-owned; no external source material"
+    }
+  ]
+}

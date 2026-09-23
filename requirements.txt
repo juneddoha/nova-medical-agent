@@ -1,0 +1,1 @@
+# Local mock baseline uses only the Python standard library (Python 3.8+).

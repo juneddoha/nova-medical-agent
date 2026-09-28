@@ -3,6 +3,8 @@ from typing import Dict, List, Optional
 
 from src.actions import Action
 
+VALID_STATUSES = {"positive", "negative", "unknown", "contradictory"}
+
 
 @dataclass(frozen=True)
 class Observation:
@@ -36,6 +38,21 @@ class PatientState:
     actions_taken: List[Action] = field(default_factory=list)
     turn: int = 0
     final_diagnosis: Optional[str] = None
+    max_turns: int = 60
+    last_error: Optional[str] = None
+
+    def add_observation(self, observation, action, turn):
+        if not isinstance(observation, Observation):
+            raise ValueError("Environment must return Observation")
+        if not isinstance(observation.value, str) or not observation.value.strip():
+            raise ValueError("Observation value must be nonempty text")
+        if not isinstance(observation.status, str) or observation.status not in VALID_STATUSES:
+            raise ValueError("Invalid observation status")
+        if (type(observation.source_turn) is not int or observation.source_turn != turn
+                or not isinstance(observation.source_action, Action)
+                or observation.source_action.key() != action.key()):
+            raise ValueError("Observation source does not match the requested action/turn")
+        self.observations.append(observation)
 
     def has_action(self, action):
         return any(previous.key() == action.key() for previous in self.actions_taken)
@@ -50,4 +67,6 @@ class PatientState:
             "actions_taken": [item.to_dict() for item in self.actions_taken],
             "turn": self.turn,
             "final_diagnosis": self.final_diagnosis,
+            "max_turns": self.max_turns,
+            "last_error": self.last_error,
         }

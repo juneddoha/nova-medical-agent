@@ -82,7 +82,7 @@ class BaselineTest(unittest.TestCase):
                     LocalEnvironment(case).observe, writer,
                 )
             records = [json.loads(line) for line in path.read_text(encoding="utf-8").splitlines()]
-        self.assertEqual(result.format_errors, 2)
+        self.assertEqual(result.format_errors, 3)
         self.assertEqual(result.state.turn, 3)
         self.assertEqual([record["error"] for record in records[:2]], ["invalid_decision"] * 2)
         self.assertEqual(records[-1]["action"]["type"], "DIAGNOSE")

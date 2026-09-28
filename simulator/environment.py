@@ -3,10 +3,7 @@ from dataclasses import dataclass
 from pathlib import Path
 
 from src.actions import Action, ActionType
-from src.state import Observation
-
-
-VALID_STATUSES = {"positive", "negative", "unknown", "contradictory"}
+from src.state import Observation, VALID_STATUSES
 
 
 @dataclass(frozen=True)

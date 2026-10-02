@@ -11,6 +11,10 @@ from src.state import DifferentialCandidate, PatientState
 class InvalidDecision(ValueError):
     """The model replied, but its response does not satisfy our contract."""
 
+    def __init__(self, message, code="invalid_fields", field=None):
+        super().__init__(message)
+        self.detail = {"code": code, "field": field, "message": message}
+
 
 def _text(value):
     return isinstance(value, str) and bool(value.strip())
@@ -24,24 +28,30 @@ class Decision:
 
     def validate(self):
         if not isinstance(self.action, Action):
-            raise InvalidDecision("action must be an Action")
-        self.action.validate()
+            raise InvalidDecision("행동 객체가 필요합니다.", "invalid_type", "action")
+        if not isinstance(self.action.type, ActionType):
+            raise InvalidDecision("ASK, EXAM, TEST, DIAGNOSE 중 하나를 사용하세요.", "invalid_action", "action.type")
+        if not _text(self.action.content):
+            raise InvalidDecision("행동 내용을 비어 있지 않은 문자열로 입력하세요.", "invalid_text", "action.content")
         if not _text(self.rationale):
-            raise InvalidDecision("rationale must be nonempty text")
+            raise InvalidDecision("선택 이유를 비어 있지 않은 문자열로 입력하세요.", "invalid_text", "rationale")
         if not isinstance(self.differential, list):
-            raise InvalidDecision("differential must be a list")
+            raise InvalidDecision("진단 후보는 배열이어야 합니다.", "invalid_type", "differential")
         names = set()
-        for item in self.differential:
+        for index, item in enumerate(self.differential):
+            field = "differential[{}]".format(index)
             if not isinstance(item, DifferentialCandidate) or not _text(item.name):
-                raise InvalidDecision("candidate name must be nonempty text")
-            for values in (item.supporting, item.opposing, item.missing):
+                raise InvalidDecision("후보 이름은 비어 있지 않은 문자열이어야 합니다.", "invalid_text", field + ".name")
+            for key in ("supporting", "opposing", "missing"):
+                values = getattr(item, key)
                 if not isinstance(values, list) or any(not _text(v) for v in values):
-                    raise InvalidDecision("candidate evidence must be lists of nonempty text")
+                    raise InvalidDecision("근거는 비어 있지 않은 문자열의 배열이어야 합니다. 빈 배열은 허용합니다.",
+                                          "invalid_evidence", field + "." + key)
             if item.risk not in ("unknown", "low", "medium", "high"):
-                raise InvalidDecision("risk must be unknown, low, medium, or high")
+                raise InvalidDecision("unknown, low, medium, high 중 하나를 사용하세요.", "invalid_risk", field + ".risk")
             name = normalize(item.name)
             if name in names:
-                raise InvalidDecision("duplicate candidate name")
+                raise InvalidDecision("같은 이름의 후보를 한 번만 입력하세요.", "duplicate_candidate", field + ".name")
             names.add(name)
 
 
@@ -52,7 +62,7 @@ positive/negative/unknown/contradictory를 구분하세요. unknown과 미확인
 관찰을 지어내거나 모순을 숨기지 마세요. supporting/opposing에는 근거와 관찰 턴 번호를,
 초기 정보가 근거라면 '초기 정보'를 명시하세요. missing에는 확인이 필요한 정보를 적으세요.
 후보는 가능성이 높은 순서로 정렬하고 risk는 놓쳤을 때의 위험성을 뜻합니다.
-이미 성공한 행동을 반복하지 마세요. last_error가 있으면 같은 오류를 피하세요.
+이미 성공한 행동을 반복하지 마세요. last_error와 last_error_detail을 보고 오류를 수정하세요.
 후보를 구분하거나 중요한 위험을 확인하는 행동 하나를 선택하고 불필요한 검사를 피하세요.
 DIAGNOSE 전에 중요한 반대 근거와 미확인 위험을 검토하세요.
 final_turn이 true이면 최신 관찰까지 종합하여 반드시 DIAGNOSE를 반환하세요.
@@ -81,40 +91,59 @@ def _object(pairs):
     result = {}
     for key, value in pairs:
         if key in result:
-            raise InvalidDecision("duplicate JSON key")
+            raise InvalidDecision("JSON 객체 안의 중복 키를 제거하세요.", "duplicate_key")
         result[key] = value
     return result
 
 
-def _keys(value, expected):
-    if not isinstance(value, dict) or set(value) != set(expected):
-        raise InvalidDecision("required keys: " + ", ".join(expected))
+def _keys(value, expected, field):
+    if not isinstance(value, dict):
+        raise InvalidDecision("JSON 객체가 필요합니다.", "invalid_type", field)
+    missing = [key for key in expected if key not in value]
+    if missing:
+        raise InvalidDecision("필수 항목 누락: " + ", ".join(missing), "missing_fields", field)
+    if set(value) - set(expected):
+        # Do not echo arbitrary model text in diagnostics.
+        raise InvalidDecision("추가 항목을 제거하세요. 허용 항목: " + ", ".join(expected), "extra_fields", field)
+
+
+def _invalid_constant(value):
+    raise InvalidDecision("NaN과 Infinity는 JSON 값으로 사용할 수 없습니다.", "invalid_json")
 
 
 def parse_decision(raw: str) -> Decision:
     """Validate syntax/types, not the clinical truth of generated evidence."""
     if not isinstance(raw, str):
-        raise InvalidDecision("response must be JSON text")
+        raise InvalidDecision("응답은 JSON 문자열이어야 합니다.", "invalid_type", "response")
     try:
-        data = json.loads(raw, object_pairs_hook=_object)
-        _keys(data, ("action", "rationale", "differential"))
-        _keys(data["action"], ("type", "content"))
+        data = json.loads(raw, object_pairs_hook=_object, parse_constant=_invalid_constant)
+        _keys(data, ("action", "rationale", "differential"), "response")
+        _keys(data["action"], ("type", "content"), "action")
+        try:
+            action_type = ActionType(data["action"]["type"])
+        except (TypeError, ValueError):
+            raise InvalidDecision("ASK, EXAM, TEST, DIAGNOSE 중 하나를 사용하세요.", "invalid_action", "action.type") from None
         if not isinstance(data["differential"], list):
-            raise InvalidDecision("differential must be a list")
+            raise InvalidDecision("진단 후보는 배열이어야 합니다.", "invalid_type", "differential")
         candidates = []
-        for item in data["differential"]:
-            _keys(item, ("name", "supporting", "opposing", "missing", "risk"))
+        for index, item in enumerate(data["differential"]):
+            _keys(item, ("name", "supporting", "opposing", "missing", "risk"), "differential[{}]".format(index))
             candidates.append(DifferentialCandidate(**item))
         decision = Decision(
-            Action(ActionType(data["action"]["type"]), data["action"]["content"]),
+            Action(action_type, data["action"]["content"]),
             data["rationale"], candidates,
         )
         decision.validate()
         return decision
     except InvalidDecision:
         raise
-    except (TypeError, ValueError, RecursionError) as exc:
-        raise InvalidDecision("invalid JSON or decision fields") from exc
+    except json.JSONDecodeError as exc:
+        raise InvalidDecision("JSON 문법 오류: {}행 {}열. 설명문 없이 JSON 객체 하나를 입력하세요.".format(
+            exc.lineno, exc.colno), "invalid_json", "response") from exc
+    except ValueError as exc:
+        raise InvalidDecision("JSON 값이 파서의 허용 범위를 초과했습니다.", "invalid_json", "response") from exc
+    except RecursionError as exc:
+        raise InvalidDecision("JSON 중첩이 너무 깊습니다.", "invalid_json", "response") from exc
 
 
 class StructuredLLMAdapter:

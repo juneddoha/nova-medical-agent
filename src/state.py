@@ -40,6 +40,7 @@ class PatientState:
     final_diagnosis: Optional[str] = None
     max_turns: int = 60
     last_error: Optional[str] = None
+    last_error_detail: Optional[dict] = None
 
     def add_observation(self, observation, action, turn):
         if not isinstance(observation, Observation):
@@ -69,4 +70,5 @@ class PatientState:
             "final_diagnosis": self.final_diagnosis,
             "max_turns": self.max_turns,
             "last_error": self.last_error,
+            "last_error_detail": self.last_error_detail,
         }

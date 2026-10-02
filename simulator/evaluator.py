@@ -19,6 +19,7 @@ def evaluate(case, result):
         "duplicate_rate": result.duplicate_actions / information_attempts if information_attempts else 0.0,
         "format_errors": result.format_errors,
         "execution_failures": result.execution_failures,
+        "forced_diagnosis": result.forced_diagnosis,
         "elapsed_ms": round(result.elapsed_ms, 3),
         "safety_assessed": False,
     }

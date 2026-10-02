@@ -1,6 +1,7 @@
 """Run the local synthetic baseline: python run.py"""
 
 import argparse
+import hashlib
 import json
 import sys
 from datetime import datetime
@@ -53,6 +54,9 @@ def interactive(output_dir):
             print(json.dumps(payload, ensure_ascii=False, indent=2))
             if payload["last_error"]:
                 print("이전 오류:", payload["last_error"])
+                if payload["last_error_detail"]:
+                    detail = payload["last_error_detail"]
+                    print("수정 안내:", detail["field"] or "response", "-", detail["message"])
             print("모델 응답 JSON을 직접 입력/붙여넣기하고, 빈 줄로 제출하세요.")
             print('예: {"action":{"type":"ASK","content":"언제 시작됐나요?"},'
                   '"rationale":"시작 시점 확인","differential":[]}')
@@ -83,6 +87,7 @@ def interactive(output_dir):
             "duplicate_actions": result.duplicate_actions,
             "format_errors": result.format_errors,
             "execution_failures": result.execution_failures,
+            "forced_diagnosis": result.forced_diagnosis,
         }
         summary_path.write_text(json.dumps(summary, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
         print("\n수동 테스트 종료. 제출된 진단:", result.state.final_diagnosis)
@@ -133,7 +138,9 @@ def main():
             metrics.append(evaluate(case, result))
 
     summary = {
+        "mode": "baseline",
         "adapter": "MockLLMAdapter",
+        "cases_sha256": hashlib.sha256(args.cases.read_bytes()).hexdigest(),
         "cases": metrics,
         "case_count": len(metrics),
         "accuracy": sum(item["correct"] for item in metrics) / len(metrics) if metrics else None,

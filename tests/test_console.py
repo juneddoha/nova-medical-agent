@@ -30,11 +30,14 @@ class ConsoleTest(unittest.TestCase):
             records = [json.loads(line) for line in next(Path(directory).glob("*.jsonl")).read_text(encoding="utf-8").splitlines()]
             summary = json.loads(next(Path(directory).glob("*-summary.json")).read_text(encoding="utf-8"))
         self.assertEqual(records[0]["error"], "invalid_decision")
+        self.assertEqual(records[0]["error_detail"]["code"], "invalid_json")
+        self.assertIn("수정 안내: response - JSON 문법 오류", process.stdout)
         self.assertEqual(records[1]["observation"]["value"], "어제부터 아팠어요")
         self.assertEqual(summary["mode"], "manual")
         self.assertEqual(summary["state"]["chief_complaint"], "배가 아파요")
         self.assertEqual(summary["state"]["final_diagnosis"], "미확정")
         self.assertEqual(summary["format_errors"], 1)
+        self.assertFalse(summary["forced_diagnosis"])
         self.assertIn("어제부터 아팠어요", process.stdout.split("[USER 프롬프트 / 턴 3]")[1])
 
     def test_eof_or_quit_stops_without_fabricating_diagnosis(self):

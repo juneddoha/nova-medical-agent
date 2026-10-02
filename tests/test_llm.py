@@ -34,7 +34,8 @@ class LLMTest(unittest.TestCase):
         valid = response()
         self.assertEqual(parse_decision(json.dumps(valid)).action.type, ActionType.ASK)
         invalid = ["not JSON", "```json\n{}\n```", "[]", "null", "{}",
-                   '{"action":{},"action":{}}', json.dumps(valid) + " trailing"]
+                   '{"action":{},"action":{}}', json.dumps(valid) + " trailing",
+                   "9" * 5000, "[" * 2000 + "0" + "]" * 2000]
         for path, value in [
             (("action", "type"), "TREAT"), (("action", "content"), " "),
             (("rationale",), 5), (("differential",), {}),
@@ -114,6 +115,9 @@ class LLMTest(unittest.TestCase):
         self.assertEqual(seen[1]["last_error"], "invalid_decision")
         self.assertEqual(seen[1]["differential"], [])
         self.assertEqual(records[0]["error"], "invalid_decision")
+        self.assertEqual(records[0]["error_detail"]["code"], "invalid_json")
+        self.assertEqual(seen[1]["last_error_detail"], records[0]["error_detail"])
+        self.assertIsNone(result.state.last_error_detail)
 
     def test_failed_observation_can_be_retried_and_unknown_stays_unknown(self):
         seen = []
@@ -138,6 +142,7 @@ class LLMTest(unittest.TestCase):
         self.assertEqual(seen[1]["last_error"], "environment_error: TimeoutError")
         self.assertEqual(seen[2]["observations"][0]["status"], "unknown")
         self.assertIsNone(seen[2]["last_error"])
+        self.assertIsNone(seen[2]["last_error_detail"])
 
     def test_bad_observation_does_not_mutate_state(self):
         state = PatientState("one", {}, "증상")
@@ -171,6 +176,8 @@ class LLMTest(unittest.TestCase):
             self.assertIsNotNone(records[-1]["error"])
             self.assertEqual(result.format_errors, int(mode == "invalid"))
             self.assertEqual(result.execution_failures, int(mode == "timeout"))
+            self.assertTrue(result.forced_diagnosis)
+            self.assertTrue(records[-1]["forced_diagnosis"])
 
     def test_reused_adapter_has_no_cross_case_prompt_history(self):
         prompts = []
@@ -188,6 +195,115 @@ class LLMTest(unittest.TestCase):
         self.assertEqual(prompts[1]["differential"], [])
         self.assertEqual(prompts[1]["actions_taken"], [])
         self.assertIsNone(prompts[1]["last_error"])
+        self.assertIsNone(prompts[1]["last_error_detail"])
+
+    def test_validation_details_identify_repairable_fields(self):
+        samples = [
+            ("", "invalid_json", "response"),
+            ("{}", "missing_fields", "response"),
+            ('{"action":{},"action":{}}', "duplicate_key", None),
+            ("{\"action\": NaN}", "invalid_json", None),
+        ]
+        for field, value, code in [("type", "TREAT", "invalid_action"),
+                                   ("content", "", "invalid_text")]:
+            data = response()
+            data["action"][field] = value
+            samples.append((json.dumps(data), code, "action." + field))
+        data = response()
+        data["differential"][0]["supporting"] = "not a list"
+        samples.append((json.dumps(data), "invalid_evidence", "differential[0].supporting"))
+        data = response()
+        data["secret-model-text"] = "must-not-be-echoed"
+        samples.append((json.dumps(data), "extra_fields", "response"))
+        for raw, code, field in samples:
+            with self.subTest(code=code):
+                with self.assertRaises(InvalidDecision) as caught:
+                    parse_decision(raw)
+                self.assertEqual(caught.exception.detail["code"], code)
+                self.assertEqual(caught.exception.detail["field"], field)
+                self.assertNotIn("secret-model-text", str(caught.exception))
+                self.assertNotIn("must-not-be-echoed", str(caught.exception))
+
+    def test_continuous_invalid_responses_stop_at_sixty_turns(self):
+        calls = []
+
+        def complete(messages):
+            calls.append(json.loads(messages[1]["content"]))
+            return ""
+
+        result, records = self.run_agent(complete, None, max_turns=60)
+        self.assertEqual(len(calls), 60)
+        self.assertEqual(len(records), 60)
+        self.assertEqual(result.format_errors, 60)
+        self.assertEqual(result.execution_failures, 0)
+        self.assertEqual(result.state.final_diagnosis, "미확정")
+        self.assertTrue(result.forced_diagnosis)
+        self.assertTrue(calls[-1]["final_turn"])
+        self.assertEqual(records[-1]["error_detail"]["code"], "invalid_json")
+
+    def test_adapter_timeout_recovers_without_exposing_exception_message(self):
+        seen = []
+
+        def complete(messages):
+            payload = json.loads(messages[1]["content"])
+            seen.append(payload)
+            if len(seen) == 1:
+                raise TimeoutError("Authorization: private-token")
+            return json.dumps(response("DIAGNOSE", "미확정"))
+
+        result, records = self.run_agent(complete, None)
+        self.assertEqual(result.execution_failures, 1)
+        self.assertEqual(result.format_errors, 0)
+        self.assertFalse(result.forced_diagnosis)
+        self.assertEqual(seen[1]["last_error"], "adapter_error: TimeoutError")
+        self.assertNotIn("private-token", json.dumps(records) + json.dumps(seen))
+
+    def test_unknown_and_conflicting_findings_are_kept_for_final_decision(self):
+        seen = []
+
+        def complete(messages):
+            payload = json.loads(messages[1]["content"])
+            seen.append(payload)
+            if payload["final_turn"]:
+                return json.dumps(response("DIAGNOSE", "미확정"))
+            return json.dumps(response("ASK", "확인 질문 " + str(payload["turn"])))
+
+        def observe(action, turn):
+            return Observation("확인 불가" if turn == 1 else "앞선 설명과 충돌",
+                               "unknown" if turn == 1 else "contradictory", turn, action)
+
+        result, _ = self.run_agent(complete, observe)
+        self.assertEqual([o["status"] for o in seen[-1]["observations"]], ["unknown", "contradictory"])
+        self.assertEqual(len(result.state.observations), 2)
+        self.assertFalse(result.forced_diagnosis)
+
+    def test_duplicate_decision_preserves_candidates_and_reports_feedback(self):
+        seen = []
+        environment_calls = []
+
+        def complete(messages):
+            payload = json.loads(messages[1]["content"])
+            seen.append(payload)
+            # A duplicate action must not replace the accepted candidate list.
+            return json.dumps(response(name="후보 A" if payload["turn"] == 1 else "후보 B"))
+
+        def observe(action, turn):
+            environment_calls.append(turn)
+            return Observation("정보 없음", "unknown", turn, action)
+
+        result, records = self.run_agent(complete, observe)
+        self.assertEqual(environment_calls, [1])
+        self.assertEqual(result.duplicate_actions, 1)
+        self.assertEqual(seen[2]["last_error_detail"]["code"], "duplicate_action")
+        self.assertEqual(seen[2]["differential"][0]["name"], "후보 A")
+        self.assertEqual(result.state.final_diagnosis, "후보 A")
+        self.assertTrue(result.forced_diagnosis)
+        self.assertEqual(records[-1]["error"], "final_turn_requires_diagnosis")
+
+    def test_turn_limit_rejects_non_integer_and_out_of_range_values(self):
+        for limit in (0, 61, True, 1.5, "3"):
+            with self.subTest(limit=limit), self.assertRaises(ValueError):
+                Agent(None, limit)
 
 
 if __name__ == "__main__":

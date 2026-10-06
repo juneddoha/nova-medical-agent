@@ -1,5 +1,5 @@
 import json
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from pathlib import Path
 
 from src.actions import Action, ActionType
@@ -13,6 +13,7 @@ class Case:
     chief_complaint: str
     responses: dict
     diagnosis: str
+    vital_signs: dict = field(default_factory=dict)
 
 
 def load_cases(path):
@@ -42,6 +43,7 @@ def load_cases(path):
             chief_complaint=item["initial"]["chief_complaint"],
             responses=responses,
             diagnosis=item["diagnosis"],
+            vital_signs=item["initial"].get("vital_signs", {}),
         ))
     return cases
 

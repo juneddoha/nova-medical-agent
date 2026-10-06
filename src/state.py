@@ -1,7 +1,7 @@
 from dataclasses import asdict, dataclass, field
 from typing import Dict, List, Optional
 
-from src.actions import Action
+from src.actions import Action, ActionType
 
 VALID_STATUSES = {"positive", "negative", "unknown", "contradictory"}
 
@@ -38,9 +38,15 @@ class PatientState:
     actions_taken: List[Action] = field(default_factory=list)
     turn: int = 0
     final_diagnosis: Optional[str] = None
-    max_turns: int = 60
+    max_turns: int = 50
     last_error: Optional[str] = None
     last_error_detail: Optional[dict] = None
+    stage: str = "preliminary"
+    vital_signs: dict = field(default_factory=dict)
+    attempt: int = 0
+    must_diagnose: bool = False
+    remaining_seconds: Optional[float] = 1200.0
+    soap: Optional[dict] = None
 
     def add_observation(self, observation, action, turn):
         if not isinstance(observation, Observation):
@@ -69,6 +75,26 @@ class PatientState:
             "turn": self.turn,
             "final_diagnosis": self.final_diagnosis,
             "max_turns": self.max_turns,
+            "stage": self.stage,
+            "vital_signs": self.vital_signs,
+            "attempt": self.attempt,
+            "must_diagnose": self.must_diagnose,
+            "remaining_seconds": self.remaining_seconds,
+            "soap": self.soap,
             "last_error": self.last_error,
             "last_error_detail": self.last_error_detail,
         }
+
+    def make_soap(self, diagnosis, rationale, plan):
+        """Build S/O from received data only; A/P remain unverified model judgments."""
+        subjective = ["주호소: " + self.chief_complaint, "초기 인적 정보: " + str(self.demographics)]
+        objective = ["초기 활력징후: " + (str(self.vital_signs) if self.vital_signs else "미제공")]
+        for item in self.observations:
+            target = subjective if item.source_action.type == ActionType.SAY else objective
+            target.append("턴 {} | {} | {} | {}".format(
+                item.source_turn, item.source_action.content, item.status, item.value))
+        subjective.append("위 기록 외 병력·약물·알레르기·가족력·사회력·계통 문진은 확인 여부를 추정하지 않음.")
+        return {"S": "\n".join(subjective), "O": "\n".join(objective),
+                "A": {"primary_diagnosis": diagnosis, "rationale": rationale,
+                      "differential": [asdict(item) for item in self.differential]},
+                "P": plan}

@@ -7,16 +7,16 @@ import sys
 from pathlib import Path
 
 
-COUNTS = ("ask_count", "exam_count", "test_count", "duplicate_actions",
+COUNTS = ("say_count", "exam_count", "test_count", "duplicate_actions",
           "format_errors", "execution_failures")
 METRICS = (
     ("accuracy", "정확도", True),
     ("mean_turns", "평균 턴", False),
     ("mean_actions", "평균 성공 정보 획득 행동", False),
-    ("error_turn_rate", "오류 턴 비율", True),
-    ("format_error_rate", "형식 오류/턴", True),
-    ("execution_failure_rate", "실행 실패/턴", True),
-    ("duplicate_turn_rate", "중복 행동/턴", True),
+    ("error_turn_rate", "오류/판단 시도", True),
+    ("format_error_rate", "형식 오류/판단 시도", True),
+    ("execution_failure_rate", "실행 실패/판단 시도", True),
+    ("duplicate_turn_rate", "중복 행동/판단 시도", True),
     ("forced_diagnosis_rate", "강제 종료 증례 비율", True),
     ("mean_elapsed_ms", "평균 실행 시간(ms)", False),
 )
@@ -42,14 +42,19 @@ def load_summary(path):
             raise ValueError("correct는 참/거짓이어야 합니다.")
         if not isinstance(case.get("diagnosis"), str):
             raise ValueError("diagnosis는 문자열이어야 합니다.")
-        if type(case.get("turns")) is not int or case["turns"] < 1:
-            raise ValueError("turns는 양의 정수여야 합니다.")
+        minimum_turns = 0 if data.get("schema_version", 1) >= 2 else 1
+        if type(case.get("turns")) is not int or case["turns"] < minimum_turns:
+            raise ValueError("turns 값이 올바르지 않습니다.")
+        case.setdefault("attempts", case["turns"])
+        case.setdefault("say_count", case.get("ask_count"))
+        if type(case["attempts"]) is not int or case["attempts"] < 1 or case["attempts"] < case["turns"]:
+            raise ValueError("attempts는 진료 턴 수 이상의 양의 정수여야 합니다.")
         for key in COUNTS:
-            if type(case.get(key)) is not int or not 0 <= case[key] <= case["turns"]:
-                raise ValueError(key + "는 턴 수 이하의 음이 아닌 정수여야 합니다.")
+            if type(case.get(key)) is not int or not 0 <= case[key] <= case["attempts"]:
+                raise ValueError(key + "는 판단 시도 수 이하의 음이 아닌 정수여야 합니다.")
         errors = sum(case[key] for key in COUNTS[3:])
-        if errors > case["turns"]:
-            raise ValueError("오류 수의 합이 턴 수를 초과합니다.")
+        if errors > case["attempts"]:
+            raise ValueError("오류 수의 합이 판단 시도 수를 초과합니다.")
         elapsed = case.get("elapsed_ms")
         if type(elapsed) not in (int, float) or not math.isfinite(elapsed) or elapsed < 0:
             raise ValueError("elapsed_ms는 유한한 음이 아닌 수여야 합니다.")
@@ -62,16 +67,17 @@ def summarize(data):
     cases = data["cases"]
     count = len(cases)
     turns = sum(case["turns"] for case in cases)
+    attempts = sum(case["attempts"] for case in cases)
     totals = {key: sum(case[key] for case in cases) for key in COUNTS}
     return {
         "case_count": count,
         "accuracy": sum(case["correct"] for case in cases) / count,
         "mean_turns": turns / count,
         "mean_actions": sum(totals[key] for key in COUNTS[:3]) / count,
-        "error_turn_rate": sum(totals[key] for key in COUNTS[3:]) / turns,
-        "format_error_rate": totals["format_errors"] / turns,
-        "execution_failure_rate": totals["execution_failures"] / turns,
-        "duplicate_turn_rate": totals["duplicate_actions"] / turns,
+        "error_turn_rate": sum(totals[key] for key in COUNTS[3:]) / attempts,
+        "format_error_rate": totals["format_errors"] / attempts,
+        "execution_failure_rate": totals["execution_failures"] / attempts,
+        "duplicate_turn_rate": totals["duplicate_actions"] / attempts,
         "forced_diagnosis_rate": (sum(case["forced_diagnosis"] for case in cases) / count
                                   if all("forced_diagnosis" in case for case in cases) else None),
         "mean_elapsed_ms": sum(case["elapsed_ms"] for case in cases) / count,
@@ -87,6 +93,8 @@ def summarize(data):
 
 def compare(before_path, after_path):
     before, after = load_summary(before_path), load_summary(after_path)
+    if before.get("schema_version", 1) != after.get("schema_version", 1) or before.get("stage") != after.get("stage"):
+        raise ValueError("턴 집계 버전 또는 예선·본선 단계가 다릅니다. 같은 조건으로 다시 실행하세요.")
     if {c["case_id"] for c in before["cases"]} != {c["case_id"] for c in after["cases"]}:
         raise ValueError("증례 ID 구성이 다릅니다. 같은 증례를 실행한 결과를 비교하세요.")
     warnings = []

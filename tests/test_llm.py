@@ -10,12 +10,13 @@ from src.state import Observation, PatientState
 from src.trajectory import TrajectoryWriter
 
 
-def response(action_type="ASK", content="검증용 질문", name="후보 A"):
+def response(action_type="SAY", content="검증용 질문", name="후보 A"):
     return {
         "action": {"type": action_type, "content": content},
         "rationale": "로컬 연결 검증",
         "differential": [{"name": name, "supporting": [], "opposing": [],
                           "missing": [], "risk": "unknown"}],
+        "plan": "추가 평가 계획" if action_type == "DIAGNOSE" else "",
     }
 
 
@@ -24,7 +25,7 @@ class LLMTest(unittest.TestCase):
         with tempfile.TemporaryDirectory() as directory:
             path = Path(directory) / "trajectory.jsonl"
             with TrajectoryWriter(path) as writer:
-                result = Agent(StructuredLLMAdapter(complete), max_turns).run(
+                result = Agent(StructuredLLMAdapter(complete), max_turns, max_attempts=max_turns).run(
                     case_id, {"age": "30"}, "연결 검증용 증상", observe, writer,
                 )
             records = [json.loads(line) for line in path.read_text(encoding="utf-8").splitlines()]
@@ -32,7 +33,7 @@ class LLMTest(unittest.TestCase):
 
     def test_response_contract_rejects_malformed_fields(self):
         valid = response()
-        self.assertEqual(parse_decision(json.dumps(valid)).action.type, ActionType.ASK)
+        self.assertEqual(parse_decision(json.dumps(valid)).action.type, ActionType.SAY)
         invalid = ["not JSON", "```json\n{}\n```", "[]", "null", "{}",
                    '{"action":{},"action":{}}', json.dumps(valid) + " trailing",
                    "9" * 5000, "[" * 2000 + "0" + "]" * 2000]
@@ -146,7 +147,7 @@ class LLMTest(unittest.TestCase):
 
     def test_bad_observation_does_not_mutate_state(self):
         state = PatientState("one", {}, "증상")
-        action = Action(ActionType.ASK, "질문")
+        action = Action(ActionType.SAY, "질문")
         for observation in [
             None, Observation("", "positive", 1, action),
             Observation("결과", "invalid", 1, action),
@@ -224,17 +225,18 @@ class LLMTest(unittest.TestCase):
                 self.assertNotIn("secret-model-text", str(caught.exception))
                 self.assertNotIn("must-not-be-echoed", str(caught.exception))
 
-    def test_continuous_invalid_responses_stop_at_sixty_turns(self):
+    def test_continuous_invalid_responses_stop_at_attempt_limit_without_charging_turns(self):
         calls = []
 
         def complete(messages):
             calls.append(json.loads(messages[1]["content"]))
             return ""
 
-        result, records = self.run_agent(complete, None, max_turns=60)
-        self.assertEqual(len(calls), 60)
-        self.assertEqual(len(records), 60)
-        self.assertEqual(result.format_errors, 60)
+        result, records = self.run_agent(complete, None, max_turns=50)
+        self.assertEqual(len(calls), 50)
+        self.assertEqual(len(records), 50)
+        self.assertEqual(result.format_errors, 50)
+        self.assertEqual(result.state.turn, 0)
         self.assertEqual(result.execution_failures, 0)
         self.assertEqual(result.state.final_diagnosis, "미확정")
         self.assertTrue(result.forced_diagnosis)
@@ -266,7 +268,7 @@ class LLMTest(unittest.TestCase):
             seen.append(payload)
             if payload["final_turn"]:
                 return json.dumps(response("DIAGNOSE", "미확정"))
-            return json.dumps(response("ASK", "확인 질문 " + str(payload["turn"])))
+            return json.dumps(response("SAY", "확인 질문 " + str(payload["turn"])))
 
         def observe(action, turn):
             return Observation("확인 불가" if turn == 1 else "앞선 설명과 충돌",
@@ -285,7 +287,7 @@ class LLMTest(unittest.TestCase):
             payload = json.loads(messages[1]["content"])
             seen.append(payload)
             # A duplicate action must not replace the accepted candidate list.
-            return json.dumps(response(name="후보 A" if payload["turn"] == 1 else "후보 B"))
+            return json.dumps(response(name="후보 A" if payload["attempt"] == 1 else "후보 B"))
 
         def observe(action, turn):
             environment_calls.append(turn)
@@ -296,12 +298,12 @@ class LLMTest(unittest.TestCase):
         self.assertEqual(result.duplicate_actions, 1)
         self.assertEqual(seen[2]["last_error_detail"]["code"], "duplicate_action")
         self.assertEqual(seen[2]["differential"][0]["name"], "후보 A")
-        self.assertEqual(result.state.final_diagnosis, "후보 A")
+        self.assertEqual(result.state.final_diagnosis, "미확정")
         self.assertTrue(result.forced_diagnosis)
         self.assertEqual(records[-1]["error"], "final_turn_requires_diagnosis")
 
     def test_turn_limit_rejects_non_integer_and_out_of_range_values(self):
-        for limit in (0, 61, True, 1.5, "3"):
+        for limit in (0, 51, True, 1.5, "3"):
             with self.subTest(limit=limit), self.assertRaises(ValueError):
                 Agent(None, limit)
 

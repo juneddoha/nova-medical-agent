@@ -6,13 +6,18 @@ def evaluate(case, result):
     counts = {action_type.value: 0 for action_type in ActionType}
     for action in state.actions_taken:
         counts[action.type.value] += 1
-    information_attempts = counts["ASK"] + counts["EXAM"] + counts["TEST"] + result.duplicate_actions
+    information_attempts = counts["SAY"] + counts["EXAM"] + counts["TEST"] + result.duplicate_actions
     return {
         "case_id": case.case_id,
         "diagnosis": state.final_diagnosis,
         "correct": normalize(state.final_diagnosis or "") == normalize(case.diagnosis),
         "turns": state.turn,
-        "ask_count": counts["ASK"],
+        "say_count": counts["SAY"],
+        "attempts": state.attempt,
+        "soap": state.soap,
+        "competition_model_calls": result.competition_model_calls,
+        "model_call_requirement_met": result.competition_model_calls > 0,
+        "official_submission_sent": False,
         "exam_count": counts["EXAM"],
         "test_count": counts["TEST"],
         "duplicate_actions": result.duplicate_actions,

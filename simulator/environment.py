@@ -27,16 +27,19 @@ def load_cases(path):
         ids.add(case_id)
         responses = {}
         for response in item["responses"]:
-            action = Action(ActionType(response["type"]), response["content"])
-            key = action.key()
-            if action.type == ActionType.DIAGNOSE or key in responses:
-                raise ValueError("Invalid or duplicate response in " + case_id)
+            aliases = response.get("aliases", [])
+            if not isinstance(aliases, list):
+                raise ValueError("Response aliases must be a list in " + case_id)
             if response["status"] not in VALID_STATUSES:
                 raise ValueError("Invalid observation status in " + case_id)
-            responses[key] = {
-                "value": response["value"],
-                "status": response["status"],
-            }
+            if not isinstance(response["value"], str) or not response["value"].strip():
+                raise ValueError("Response value must be nonempty text in " + case_id)
+            for content in [response["content"]] + aliases:
+                action = Action(ActionType(response["type"]), content)
+                key = action.key()
+                if action.type == ActionType.DIAGNOSE or key in responses:
+                    raise ValueError("Invalid or duplicate response in " + case_id)
+                responses[key] = {"value": response["value"], "status": response["status"]}
         cases.append(Case(
             case_id=case_id,
             demographics=item["initial"]["demographics"],

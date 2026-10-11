@@ -11,6 +11,7 @@ from unittest.mock import patch
 
 from run import clear_interactive_screen
 from src.agent import Agent
+from src.connection import bounded_call
 from src.llm import StructuredLLMAdapter
 from src.state import Observation
 
@@ -19,6 +20,69 @@ ROOT = Path(__file__).resolve().parents[1]
 
 
 class ConsoleTest(unittest.TestCase):
+    def test_interactive_mock_needs_only_patient_answers_and_can_be_aborted(self):
+        for answers, finished in [("복통\n24\n배꼽 주변부터 아팠어요\npositive\n압통이 있어요\npositive\n", True),
+                                  ("복통\n24\n중앙\npositive\n안 아파요\ncontradictory\n", True),
+                                  ("복통\n24\n/quit\n", False)]:
+            with self.subTest(finished=finished), tempfile.TemporaryDirectory() as directory:
+                process = subprocess.run(
+                    [sys.executable, "-X", "utf8", str(ROOT / "run.py"),
+                     "--interactive-mock", "--output-dir", directory],
+                    input=answers, capture_output=True, encoding="utf-8", timeout=10, cwd=ROOT)
+                self.assertEqual(process.returncode, 0, process.stderr)
+                self.assertIn("실제 모델 호출은 없습니다", process.stdout)
+                self.assertNotIn("JSON>", process.stdout)
+                self.assertNotIn("입력 확인:", process.stdout)
+                self.assertNotIn("충돌한 내용 또는 확인하지 못한 이유:", process.stdout)
+                summaries = list(Path(directory).glob("*-summary.json"))
+                self.assertEqual(len(summaries), int(finished))
+                if finished:
+                    summary = json.loads(summaries[0].read_text(encoding="utf-8"))
+                    self.assertFalse(summary["manual_model_input"])
+                    self.assertEqual(summary["adapter"], "MockLLMAdapter")
+                    self.assertEqual(summary["state"]["turn"], 2)
+                    self.assertFalse(summary["forced_diagnosis"])
+                    self.assertEqual(summary["competition_model_calls"], 0)
+                    for observation in summary["state"]["observations"]:
+                        self.assertNotIn("review_note", observation)
+                        self.assertNotIn("input_history", observation)
+
+    def test_patient_wait_preserves_model_budget_but_not_unlimited_attempts(self):
+        now = [0.0]
+        owner = current_thread()
+        seen = []
+        observation_turns = []
+
+        def complete(messages):
+            self.assertIsNot(current_thread(), owner)
+            seen.append(json.loads(messages[1]["content"]))
+            if len(seen) == 1:
+                return json.dumps({"action": {"type": "SAY", "content": "언제 시작됐나요?"},
+                                   "rationale": "시점 확인", "differential": []})
+            return "bad JSON"
+
+        def observe(action, turn):
+            self.assertIs(current_thread(), owner)
+            observation_turns.append(turn)
+            now[0] += 5000
+            return Observation("입력한 답변", "unknown", turn, action)
+
+        class Log:
+            def write(self, record):
+                pass
+
+        with patch("src.agent.perf_counter", side_effect=lambda: now[0]), \
+                patch("src.agent.bounded_call", wraps=bounded_call) as bounded:
+            result = Agent(StructuredLLMAdapter(complete), manual_observations=True,
+                           max_attempts=3).run("mixed", {}, "검증", observe, Log())
+        self.assertEqual(observation_turns, [1])
+        self.assertEqual(bounded.call_count, 3)
+        self.assertEqual([p["remaining_seconds"] for p in seen], [1200, 1200, 1200])
+        self.assertTrue(seen[-1]["final_turn"])
+        self.assertEqual(result.state.attempt, 3)
+        self.assertEqual(result.format_errors, 2)
+        self.assertTrue(result.forced_diagnosis)
+
     def run_console(self, directory, text, *extra):
         return subprocess.run(
             [sys.executable, "-X", "utf8", str(ROOT / "run.py"),

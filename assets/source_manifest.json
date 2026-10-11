@@ -1,11 +1,25 @@
 {
   "version": 1,
-  "note": "No external clinical dataset or model is bundled in this baseline. The two local cases are hand-written toy examples for software checks, not medical validation data.",
+  "note": "Two project-authored toy cases plus the organizer-provided SDK/build recipe. No external clinical dataset or model is bundled.",
   "assets": [
     {
       "path": "simulator/sample_cases.json",
       "origin": "Project-authored synthetic examples",
       "license": "Project-owned; no external source material"
+    },
+    {
+      "path": "nova_sdk.py",
+      "origin": "https://nova.snubhai.org/docs/starter.zip",
+      "version": "NOVA SDK 1.0.0; supplied 2026-10-10",
+      "license": "Organizer-provided competition starter; no separate license file in the supplied ZIP. Preserve source and follow competition terms.",
+      "sha256": "3233b4546722af7267f6652cdc6fce0712b56c12f7a9ebdc2a022e464239d045"
+    },
+    {
+      "path": "local.Dockerfile",
+      "origin": "https://nova.snubhai.org/docs/starter.zip",
+      "version": "NOVA SDK 1.0.0; supplied 2026-10-10",
+      "license": "Organizer-provided competition starter; no separate license file in the supplied ZIP. Preserve source and follow competition terms.",
+      "sha256": "a2a28d60ad0ce453030056cb4540355346176e3f3c74b26c73b513f02c5baf32"
     }
   ]
 }

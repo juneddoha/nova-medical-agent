@@ -1,5 +1,6 @@
 from dataclasses import dataclass
 from enum import Enum
+import unicodedata
 
 
 class ActionType(str, Enum):
@@ -14,13 +15,17 @@ class ExamRejected(ValueError):
 
 
 def normalize(text):
-    return " ".join(text.split()).casefold()
+    return " ".join(unicodedata.normalize("NFC", text).split()).casefold()
 
 
 @dataclass(frozen=True)
 class Action:
     type: ActionType
     content: str
+
+    def __post_init__(self):
+        if isinstance(self.content, str):
+            object.__setattr__(self, "content", unicodedata.normalize("NFC", self.content))
 
     def validate(self):
         if not isinstance(self.type, ActionType):
@@ -34,9 +39,10 @@ class Action:
             raise ValueError("Unknown competition stage")
         if self.type == ActionType.TEST and stage == "preliminary":
             raise ValueError("예선에서는 TEST를 실행할 수 없습니다. 검사 계획은 DIAGNOSE의 plan에 기록하세요.")
-        if self.type == ActionType.SAY:
+        if self.type in (ActionType.SAY, ActionType.EXAM, ActionType.TEST):
             if len(self.content) > 30:
-                raise ValueError("SAY는 공백·문장부호를 포함해 30자 이하여야 합니다.")
+                raise ValueError("SAY·EXAM·TEST는 공백·문장부호 포함 NFC 30자 이하여야 합니다.")
+        if self.type == ActionType.SAY:
             # ponytail: obvious multiple questions only; semantic bundling needs model/server validation.
             if self.content.count("?") + self.content.count("？") > 1 or "\n" in self.content or "\r" in self.content:
                 raise ValueError("SAY는 한 번에 하나의 질문 또는 설명만 전달하세요.")

@@ -23,7 +23,8 @@ class RunResult:
 
 class Agent:
     def __init__(self, adapter, max_turns=50, *, stage="preliminary", max_attempts=200,
-                 time_limit_seconds=1200, submission_reserve_seconds=5, manual_input=False):
+                 time_limit_seconds=1200, submission_reserve_seconds=5, manual_input=False,
+                 manual_observations=False):
         if type(max_turns) is not int or not 1 <= max_turns <= 50:
             raise ValueError("max_turns must be between 1 and 50")
         if type(max_attempts) is not int or not 1 <= max_attempts <= 200:
@@ -43,6 +44,7 @@ class Agent:
         self.time_limit_seconds = time_limit_seconds
         self.submission_reserve_seconds = submission_reserve_seconds
         self.manual_input = manual_input
+        self.manual_observations = manual_observations
 
     def run(self, case_id, demographics, chief_complaint, observe, trajectory, *, vital_signs=None):
         state = PatientState(case_id, dict(demographics), chief_complaint,
@@ -80,7 +82,7 @@ class Agent:
         for attempt in attempts:
             state.attempt = attempt
             state.remaining_seconds = (None if self.manual_input else
-                                       max(0, started + self.time_limit_seconds - perf_counter()))
+                                       max(0, deadline + self.submission_reserve_seconds - perf_counter()))
             state.must_diagnose = state.turn >= self.max_turns or (not self.manual_input and attempt == self.max_attempts)
             if perf_counter() >= deadline:
                 error("time_budget_exhausted", "기록 마감 시간을 확보하기 위해 종료합니다.")
@@ -144,8 +146,16 @@ class Agent:
             observation = None
             next_turn = state.turn + 1
             try:
-                observation = (observe(action, next_turn) if self.manual_input else
-                               bounded_call(lambda: observe(action, next_turn), deadline - perf_counter()))
+                if self.manual_input or self.manual_observations:
+                    waiting_started = perf_counter()
+                    try:
+                        observation = observe(action, next_turn)
+                    finally:
+                        # Human input has no deadline; automated decisions retain their limits.
+                        if self.manual_observations and not self.manual_input:
+                            deadline += perf_counter() - waiting_started
+                else:
+                    observation = bounded_call(lambda: observe(action, next_turn), deadline - perf_counter())
                 state.add_observation(observation, action, next_turn)
             except ExamRejected:
                 if action.type == ActionType.EXAM:

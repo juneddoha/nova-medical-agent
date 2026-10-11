@@ -2,6 +2,7 @@ __pycache__/
 *.py[cod]
 .venv/
 runs/
+@test_*
 .env
 .env.*
 !.env.example

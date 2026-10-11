@@ -175,7 +175,7 @@ class OTTest(unittest.TestCase):
         data = json.loads(process.stdout)
         self.assertEqual(data["network_requests"], 0)
         self.assertFalse(data["real_api_verified"])
-        self.assertFalse(data["official_transport_implemented"])
+        self.assertTrue(data["official_transport_implemented"])
         self.assertFalse(data["stub_usage"]["competition_transport"])
 
     def test_compare_handles_zero_clinical_turns_and_refuses_mixed_turn_definitions(self):

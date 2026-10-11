@@ -2,7 +2,7 @@
 
 import json
 from dataclasses import dataclass, field
-from typing import List, Protocol
+from typing import List
 
 from src.actions import Action, ActionType, normalize
 from src.state import DifferentialCandidate, PatientState
@@ -68,7 +68,7 @@ positive/negative/unknown/contradictory를 구분하세요. unknown과 미확인
 이미 성공한 행동을 반복하지 마세요. last_error와 last_error_detail을 보고 오류를 수정하세요.
 후보를 구분하거나 중요한 위험을 확인하는 행동 하나를 선택하고 불필요한 검사를 피하세요.
 DIAGNOSE 전에 중요한 반대 근거와 미확인 위험을 검토하세요.
-SAY는 공백·문장부호 포함 30자 이하이며, 질문은 하나씩 하세요. 설명·공감·환자 교육도 SAY로 실제 전달하세요.
+SAY·EXAM·TEST는 공백·문장부호 포함 NFC 30자 이하입니다. SAY 질문은 하나씩 하세요. 설명·공감·환자 교육도 SAY로 실제 전달하세요.
 EXAM은 진찰 동작 하나를 문장으로 요청하세요. 여러 동작을 묶지 마세요.
 stage가 preliminary이면 TEST는 금지입니다. 필요한 검사 계획은 plan에 적으세요.
 stage가 final이면 TEST로 검사 하나를 요청할 수 있습니다.
@@ -169,11 +169,6 @@ class StructuredLLMAdapter:
 
     def next_action(self, state):
         return parse_decision(self.complete(build_messages(state)))
-
-
-class LLMAdapter(Protocol):
-    def next_action(self, state: PatientState) -> Decision:
-        """Use only information already present in state."""
 
 
 class MockLLMAdapter:

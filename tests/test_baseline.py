@@ -25,6 +25,37 @@ class InvalidAdapter:
 
 
 class BaselineTest(unittest.TestCase):
+    def test_response_aliases_preserve_requested_source_and_unknown_questions(self):
+        environment = LocalEnvironment(load_cases(CASES)[0])
+        original = environment.observe(Action(ActionType.SAY, "통증이 시작된 위치는 어디인가요?"), 1)
+        action = Action(ActionType.SAY, "  처음  어디가 아팠나요? ")
+        alias = environment.observe(action, 2)
+        self.assertEqual((alias.value, alias.status), (original.value, original.status))
+        self.assertEqual(alias.source_action, action)
+        self.assertEqual(alias.source_turn, 2)
+        for action in [Action(ActionType.SAY, "처음 어디가 아프지 않았나요?"),
+                       Action(ActionType.EXAM, "처음 어디가 아팠나요?")]:
+            self.assertEqual(environment.observe(action, 3).status, "unknown")
+
+    def test_response_aliases_reject_invalid_values_and_conflicting_mappings(self):
+        for aliases in ("별칭", [""], [None], ["처음?", " 처음? "],
+                        ["통증이 시작된 위치는 어디인가요?"]):
+            with self.subTest(aliases=aliases), tempfile.TemporaryDirectory() as directory:
+                data = json.loads(CASES.read_text(encoding="utf-8"))
+                data[0]["responses"][0]["aliases"] = aliases
+                path = Path(directory) / "cases.json"
+                path.write_text(json.dumps(data), encoding="utf-8")
+                with self.assertRaises(ValueError):
+                    load_cases(path)
+        with tempfile.TemporaryDirectory() as directory:
+            data = json.loads(CASES.read_text(encoding="utf-8"))
+            data[0]["responses"].append({"type": "SAY", "content": "처음 어디가 아팠나요?",
+                                          "value": "상충하는 결과", "status": "negative"})
+            path = Path(directory) / "cases.json"
+            path.write_text(json.dumps(data), encoding="utf-8")
+            with self.assertRaises(ValueError):
+                load_cases(path)
+
     def test_two_cases_finish_without_state_leakage(self):
         cases = load_cases(CASES)
         with tempfile.TemporaryDirectory() as directory:

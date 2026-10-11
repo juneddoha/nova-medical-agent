@@ -1,4 +1,4 @@
-"""Provider-neutral connection seam. No endpoint or HTTP schema is assumed."""
+"""Generic injected transport used by local checks; official execution is in official.py."""
 
 import os
 from dataclasses import dataclass, field
@@ -43,7 +43,8 @@ class ConnectionSettings:
 
     @classmethod
     def from_env(cls):
-        return cls(os.environ.get("NOVA_API_URL", ""), os.environ.get("NOVA_API_KEY", ""))
+        return cls(os.environ.get("NOVA_API_BASE", ""),
+                   os.environ.get("NOVA_RUN_TOKEN") or os.environ.get("NOVA_DEV_KEY", ""))
 
 
 @dataclass(frozen=True)
@@ -54,7 +55,7 @@ class ModelReply:
 
 
 class PreparedAPIAdapter:
-    """One instance per server session; complete and count_input_tokens await official specs.
+    """Injected transport contract for local experiments, separate from the official SDK.
 
     complete(messages, *, model, timeout_seconds, max_output_tokens) -> ModelReply
     count_input_tokens(messages, model) must conservatively include all provider overhead.

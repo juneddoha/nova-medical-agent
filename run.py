@@ -1,8 +1,9 @@
-"""Run the local synthetic baseline: python run.py"""
+"""Official SDK entry point, with local mock and interactive development modes."""
 
 import argparse
 import hashlib
 import json
+import os
 import sys
 from datetime import datetime
 from pathlib import Path
@@ -13,11 +14,17 @@ from simulator.evaluator import evaluate
 from src.agent import Agent
 from src.connection import ConnectionSettings, ModelReply, PreparedAPIAdapter
 from src.llm import MockLLMAdapter, StructuredLLMAdapter
+from src.official import consult
 from src.state import Observation, PatientState, VALID_STATUSES
 from src.trajectory import TrajectoryWriter
 
 
 ROOT = Path(__file__).resolve().parent
+
+
+def prepare():
+    """No assets to load for the fixed preliminary model; no case access here."""
+    return None
 
 
 def read_input(prompt):
@@ -36,12 +43,31 @@ def clear_interactive_screen():
         print("\033[2J\033[3J\033[H", end="", flush=True)
 
 
-def interactive(output_dir, stage="preliminary", show_prompts=False):
+def read_observation(action, turn):
+    print("\n선택된 행동:", action.type.value, action.content)
+    value = read_input("환자 답변/관찰 결과: ").strip()
+    while not value:
+        value = read_input("관찰 결과를 입력하세요: ").strip()
+    status = read_input("상태 [positive/negative/unknown/contradictory] (기본 unknown): ").strip() or "unknown"
+    while status not in VALID_STATUSES:
+        status = read_input("상태를 다시 입력하세요: ").strip() or "unknown"
+    return Observation(value, status, turn, action)
+
+
+def interactive(output_dir, stage="preliminary", show_prompts=False, *, adapter=None):
+    manual_model_input = adapter is None
     clear_interactive_screen()
-    print("수동 연결 테스트입니다. 실제 LLM 호출이나 자동 진단은 수행하지 않습니다.")
+    if manual_model_input:
+        print("수동 연결 테스트입니다. 실제 LLM 호출이나 자동 진단은 수행하지 않습니다.")
+        print("입력 대기 시간 제한은 없습니다. 직접 DIAGNOSE를 입력해야 진단을 확정합니다.")
+        print("전체 프롬프트 보기: --show-prompts")
+    else:
+        if isinstance(adapter, MockLLMAdapter):
+            print("고정 Mock 테스트입니다. 실제 모델 호출은 없습니다. 예제 주증상: 복통 / 기침")
+            print("Mock의 질문·진단은 고정되어 있으며 입력한 답변에 따라 달라지지 않습니다.")
+        print("자동 판단·수동 환자 응답 테스트입니다. 환자 답변/관찰 결과만 입력하세요.")
+        print("환자 입력 대기에는 시간 제한이 없습니다. 자동 판단에는 시간·횟수 제한이 적용됩니다.")
     print("새 테스트를 시작합니다. 이전 실행 기록은 불러오지 않습니다.")
-    print("입력 대기 시간 제한은 없습니다. 직접 DIAGNOSE를 입력해야 진단을 확정합니다.")
-    print("전체 프롬프트 보기: --show-prompts")
     print("종료: /quit 또는 Ctrl+C")
     trajectory_path = None
     try:
@@ -85,22 +111,16 @@ def interactive(output_dir, stage="preliminary", show_prompts=False):
                     continue
                 lines.append(line)
 
-        def observe(action, turn):
-            print("\n선택된 행동:", action.type.value, action.content)
-            value = read_input("환자 답변/관찰 결과: ").strip()
-            while not value:
-                value = read_input("관찰 결과를 입력하세요: ").strip()
-            status = read_input("상태 [positive/negative/unknown/contradictory] (기본 unknown): ").strip() or "unknown"
-            while status not in VALID_STATUSES:
-                status = read_input("상태를 다시 입력하세요: ").strip() or "unknown"
-            return Observation(value, status, turn, action)
-
+        if manual_model_input:
+            adapter = StructuredLLMAdapter(complete)
         with TrajectoryWriter(trajectory_path) as trajectory:
-            result = Agent(StructuredLLMAdapter(complete), stage=stage, manual_input=True).run(
-                run_id, {"age": age} if age else {}, complaint, observe, trajectory,
+            result = Agent(adapter, stage=stage, manual_input=manual_model_input,
+                           manual_observations=True).run(
+                run_id, {"age": age} if age else {}, complaint, read_observation, trajectory,
             )
         summary = {
             "mode": "manual", "state": result.state.to_dict(),
+            "manual_model_input": manual_model_input, "adapter": type(adapter).__name__,
             "duplicate_actions": result.duplicate_actions,
             "format_errors": result.format_errors,
             "execution_failures": result.execution_failures,
@@ -120,16 +140,29 @@ def interactive(output_dir, stage="preliminary", show_prompts=False):
 def main():
     if hasattr(sys.stdout, "reconfigure"):
         sys.stdout.reconfigure(encoding="utf-8")
-    parser = argparse.ArgumentParser(description="N.O.V.A. local mock baseline")
+    parser = argparse.ArgumentParser(description="N.O.V.A. official SDK and local development")
     parser.add_argument("--cases", type=Path, default=ROOT / "simulator" / "sample_cases.json")
     mode = parser.add_mutually_exclusive_group()
+    mode.add_argument("--official", action="store_true", help="Run a server-issued session using NOVA_RUN_TOKEN")
     mode.add_argument("--case", help="Run one case_id instead of all cases")
     mode.add_argument("--interactive", action="store_true", help="Enter patient data and simulated model replies in the terminal (no LLM)")
+    mode.add_argument("--interactive-mock", action="store_true", help="Use fixed Mock decisions and enter patient replies (no LLM)")
     mode.add_argument("--check-connection", action="store_true", help="Check configuration and exercise an offline stub; no network requests")
     parser.add_argument("--stage", choices=("preliminary", "final"), default="preliminary")
     parser.add_argument("--output-dir", type=Path, default=ROOT / "runs")
     parser.add_argument("--show-prompts", action="store_true", help="Show full prompts in the manual interactive mode")
     args = parser.parse_args()
+    if args.official or (len(sys.argv) == 1 and (
+            os.environ.get("NOVA_RUN_TOKEN") or os.environ.get("NOVA_SESSION_ID"))):
+        if args.stage != "preliminary":
+            parser.error("Official execution currently supports the preliminary stage only")
+        if not os.environ.get("NOVA_API_BASE") or not os.environ.get("NOVA_RUN_TOKEN"):
+            parser.error("Official execution requires NOVA_API_BASE and NOVA_RUN_TOKEN")
+        from nova_sdk import run_agent
+        print(json.dumps(run_agent(prepare, consult), ensure_ascii=False))
+        return
+    if args.show_prompts and not args.interactive:
+        parser.error("--show-prompts requires --interactive")
 
     if args.check_connection:
         settings = ConnectionSettings.from_env()
@@ -145,7 +178,7 @@ def main():
         print(json.dumps({"mode": "offline_stub", "model": settings.model,
                           "endpoint_configured": bool(settings.endpoint),
                           "api_key_configured": bool(settings.api_key),
-                          "official_transport_implemented": False,
+                          "official_transport_implemented": True,
                           "real_api_verified": False, "network_requests": 0,
                           "parsed_action": decision.action.type.value,
                           "stub_usage": adapter.usage()}, ensure_ascii=False, indent=2))
@@ -153,6 +186,9 @@ def main():
 
     if args.interactive:
         interactive(args.output_dir, args.stage, args.show_prompts)
+        return
+    if args.interactive_mock:
+        interactive(args.output_dir, args.stage, adapter=MockLLMAdapter())
         return
 
     cases = load_cases(args.cases)

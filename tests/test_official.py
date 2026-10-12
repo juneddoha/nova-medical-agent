@@ -46,8 +46,9 @@ class HTTPReply:
 
 class Server:
     """Mock HTTP boundary; production Client serialization and validation still run."""
-    def __init__(self, replies, turn=0):
+    def __init__(self, replies, turn=0, observations=None):
         self.replies = iter(replies)
+        self.observations = iter(observations) if observations is not None else None
         self.turn = turn
         self.requests, self.cached = [], {}
         self.refuse_exam = False
@@ -85,7 +86,8 @@ class Server:
                 return HTTPReply({"error": {"code": "EXAM_NOT_SPECIFIC"}}, 400)
             self.turn += 1
             field = "content" if body["action"] == "SAY" else "result"
-            payload = {"status": "OK", field: "실제로 받은 원문", "turn": self.turn,
+            value = next(self.observations) if self.observations is not None else "실제로 받은 원문"
+            payload = {"status": "OK", field: value, "turn": self.turn,
                        "turns_remaining": 50 - self.turn}
             if self.lose_action_reply:
                 self.lose_action_reply = False
@@ -175,6 +177,104 @@ class OfficialTest(unittest.TestCase):
         self.assertTrue(any(l["event"] == "record_fallback" for l in logs))
         self.assertIn("실제로 받은 원문", submitted["note"]["S"]["hpi"])
         self.assertEqual(submitted["note"]["O"]["tests"], "")
+        self.assertEqual(submitted["record_status"], "fallback")
+
+    def test_c10_missing_results_loop_moves_to_model_record(self):
+        # Actual C10 turns 16-18: paraphrases bypassed exact action deduplication.
+        questions = ["TSH 수치 알려주세요", "TSH와 free T4 수치를 알려주실 수 있나요?",
+                     "TSH·free T4 결과 알려주세요."]
+        answers = ["아니에요, 아직 없어요", "아직 없어요", "아직 없어요."]
+        expected = json.loads(record())
+        expected["diagnosis"] = "모델이 판단한 테스트용 진단"
+        expected["note"]["A"]["evidence"] = "확보한 관찰에 대한 모델의 판단; 검사 미확인"
+        expected["note"]["P"]["tests"] = "모델이 제안한 추가 검사 계획"
+        server = Server([step("SAY", q) for q in questions] + [json.dumps(expected)], observations=answers)
+        _, logs = self.execute(server)
+        self.assertEqual(server.turn, 3)
+        self.assertEqual(logs[-1]["diagnosis"], expected["diagnosis"])
+        self.assertEqual(logs[-1]["note"], expected["note"])
+        self.assertEqual(logs[-1]["stop_reason"], "unavailable_test_results")
+        self.assertEqual(logs[-1]["record_status"], "model_generated")
+        chats = [b for p, b in server.requests if p == "/v1/chat/completions"]
+        payload = json.loads(chats[-1]["messages"][1]["content"])
+        self.assertEqual([o["value"] for o in payload["observations"]], answers)
+        self.assertEqual(payload["proposed_diagnosis"], "")
+        self.assertNotIn("actions_taken", payload)
+
+    def test_negative_symptoms_or_received_test_values_do_not_trigger_stall(self):
+        scenarios = [(["발열이 있나요?", "기침이 있나요?", "두통이 있나요?"], ["없어요"] * 3),
+                     (["검사 결과가 있나요?", "검사 수치 알려주세요", "검사 언제 받았나요?"],
+                      ["없어요", "값은 10입니다", "어제 받았어요"])]
+        for questions, answers in scenarios:
+            with self.subTest(questions=questions):
+                server = Server([step("SAY", q) for q in questions] +
+                                [step("DIAGNOSE", "미확정"), record()], observations=answers)
+                _, logs = self.execute(server)
+                self.assertEqual(logs[-1]["stop_reason"], "model_diagnosis")
+
+    def test_specific_validation_feedback_reaches_next_decision(self):
+        server = Server([step("SAY", "가" * 31), "{", step("SAY", "언제 시작됐나요?"),
+                         step("SAY", "언제 시작됐나요?"), step("DIAGNOSE", "미확정"), record()])
+        _, logs = self.execute(server)
+        errors = [l["detail"] for l in logs if l["event"] == "decision_error"]
+        self.assertEqual([e["code"] for e in errors],
+                         ["action_rule_violation", "invalid_json", "duplicate_action"])
+        chats = [b for p, b in server.requests if p == "/v1/chat/completions"]
+        for index, detail in zip((1, 2, 4), errors):
+            self.assertEqual(json.loads(chats[index]["messages"][1]["content"])["last_error_detail"], detail)
+        self.assertIn("30자", errors[0]["message"])
+        self.assertEqual(chats[2]["max_tokens"], 8192)
+        self.assertEqual(server.turn, 1)
+
+    def test_empty_record_response_retries_with_more_tokens_and_preserves_diagnostics(self):
+        server = Server([step("DIAGNOSE", "미확정"), "", record()])
+        original_open = server.open
+
+        def open_response(request):
+            reply = original_open(request)
+            payload = json.loads(reply.payload)
+            if request.full_url.endswith("/chat/completions") and not payload["choices"][0]["message"]["content"]:
+                payload["choices"][0]["finish_reason"] = "length"
+                payload["choices"][0]["message"]["reasoning_content"] = "test reasoning"
+                return HTTPReply(payload)
+            return reply
+
+        server.open = open_response
+        _, logs = self.execute(server)
+        chats = [b for p, b in server.requests if p == "/v1/chat/completions"]
+        self.assertEqual([b["max_tokens"] for b in chats], [4096, 8192, 16384])
+        self.assertNotEqual(chats[1]["request_id"], chats[2]["request_id"])
+        self.assertEqual(logs[-1]["record_status"], "model_generated")
+        self.assertEqual(logs[-1]["output_tokens"], 60)  # Empty replies also cost tokens.
+        self.assertTrue(logs[-1]["usage_complete"])
+        diagnostic = next(l for l in logs if l.get("finish_reason") == "length")
+        self.assertEqual(diagnostic["content_chars"], 0)
+        self.assertGreater(diagnostic["reasoning_chars"], 0)
+        self.assertNotIn("test reasoning", json.dumps(logs))
+
+    def test_persistent_empty_record_is_bounded_and_marked_fallback(self):
+        server = Server([step("SAY", "언제 시작됐나요?"), step("DIAGNOSE", "미확정")] + [""] * 4)
+        _, logs = self.execute(server)
+        chats = [b for p, b in server.requests if p == "/v1/chat/completions"]
+        self.assertEqual(len(chats), 6)
+        self.assertEqual([b["max_tokens"] for b in chats[-4:]], [8192, 16384, 16384, 16384])
+        self.assertEqual(logs[-1]["record_status"], "fallback")
+        self.assertIn("실제로 받은 원문", logs[-1]["note"]["S"]["hpi"])
+
+    def test_record_format_feedback_and_retry_preserve_evidence(self):
+        server = Server([step("SAY", "언제 시작됐나요?"), step("DIAGNOSE", "미확정"), "{}", record()])
+        _, logs = self.execute(server)
+        chats = [b for p, b in server.requests if p == "/v1/chat/completions"]
+        self.assertIn("Expected note and diagnosis", chats[-1]["messages"][0]["content"])
+        self.assertEqual(chats[-1]["messages"][1], chats[-2]["messages"][1])
+        self.assertEqual(logs[-1]["record_status"], "model_generated")
+
+    def test_three_decision_errors_still_generate_record_without_inventing_diagnosis(self):
+        server = Server([step("SAY", "언제 시작됐나요?"), "{}", "{}", "{}", record()])
+        _, logs = self.execute(server)
+        self.assertEqual(server.turn, 1)
+        self.assertEqual(logs[-1]["stop_reason"], "decision_errors")
+        self.assertEqual(logs[-1]["record_status"], "model_generated")
 
     def test_no_success_claim_without_completed_receipt(self):
         server = Server([step("DIAGNOSE", "미확정"), record()])

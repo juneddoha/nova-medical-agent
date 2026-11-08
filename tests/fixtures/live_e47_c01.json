@@ -1,0 +1,261 @@
+[
+  {
+    "turn": 1,
+    "action": "SAY",
+    "content": "잠을 못 주무신 건 언제부터인가요?",
+    "reply": "7년 전부터 잠을 잘 못 잤어요.",
+    "purpose": "question",
+    "explain": false,
+    "delivery_verified": true
+  },
+  {
+    "turn": 2,
+    "action": "SAY",
+    "content": "하루 실제로 몇 시간 주무시나요?",
+    "reply": "약 먹고도 하루 네 시간쯤 자요.",
+    "purpose": "question",
+    "explain": false,
+    "delivery_verified": true
+  },
+  {
+    "turn": 3,
+    "action": "SAY",
+    "content": "잠드는 게 어렵나요,",
+    "reply": "네, 잠드는 게 어려워요.",
+    "purpose": "question",
+    "explain": false,
+    "delivery_verified": true
+  },
+  {
+    "turn": 4,
+    "action": "SAY",
+    "content": "보통 몇 시에 누워 몇 시에 일어나세요?",
+    "reply": "밤 11시에 눕고 7시에 일어나요.",
+    "purpose": "question",
+    "explain": false,
+    "delivery_verified": true
+  },
+  {
+    "turn": 5,
+    "action": "SAY",
+    "content": "누우신 뒤 잠들기까지 보통 얼마나 걸리세요?",
+    "reply": "약 먹고 한 시간쯤 걸려요.",
+    "purpose": "question",
+    "explain": false,
+    "delivery_verified": true
+  },
+  {
+    "turn": 6,
+    "action": "SAY",
+    "content": "일주일에 며칠 정도 잠들기 어려우세요?",
+    "reply": "거의 매일 잠들기 어려워요.",
+    "purpose": "question",
+    "explain": false,
+    "delivery_verified": true
+  },
+  {
+    "turn": 7,
+    "action": "SAY",
+    "content": "잠을 못 자서 낮 동안 일상생활에 지장이 있나요?",
+    "reply": "낮에 졸려 집안일 하다 잠들어요.",
+    "purpose": "question",
+    "explain": false,
+    "delivery_verified": true
+  },
+  {
+    "turn": 8,
+    "action": "SAY",
+    "content": "현재 드시는 수면제 이름과 용량이 어떻게 되나요?",
+    "reply": "졸피뎀 10mg, 밤에 여섯 알요.",
+    "purpose": "question",
+    "explain": false,
+    "delivery_verified": true
+  },
+  {
+    "turn": 9,
+    "action": "SAY",
+    "content": "마지막으로 졸피뎀을 몇 시에 몇 알 드셨나요?",
+    "reply": "오늘 새벽 세 시쯤 두 알 먹었어요.",
+    "purpose": "question",
+    "explain": false,
+    "delivery_verified": true
+  },
+  {
+    "turn": 10,
+    "action": "EXAM",
+    "content": "의식 수준을 확인하겠습니다",
+    "reply": "명료, 지남력 3/3점",
+    "purpose": "question",
+    "explain": false
+  },
+  {
+    "turn": 11,
+    "action": "SAY",
+    "content": "더 드시지 말고, 혼자 운전하지 말고 응급실로 가세요.",
+    "reply": "네, 남편과 응급실로 갈게요.",
+    "purpose": "guidance",
+    "explain": false,
+    "delivery_verified": true
+  },
+  {
+    "turn": 12,
+    "action": "SAY",
+    "content": "졸피뎀은 처방받은 용량이 몇 mg인가요?",
+    "reply": "하루 10mg 처방받았어요.",
+    "purpose": "question",
+    "explain": false,
+    "delivery_verified": true
+  },
+  {
+    "turn": 13,
+    "action": "SAY",
+    "content": "하루 여섯 알씩 드신 건 얼마나 됐나요?",
+    "reply": "최근 일 년 사이에 늘었어요.",
+    "purpose": "question",
+    "explain": false,
+    "delivery_verified": true
+  },
+  {
+    "turn": 14,
+    "action": "SAY",
+    "content": "오늘 졸피뎀 외에 술이나 다른 약도 드셨나요?",
+    "reply": "혈압약만 먹었고 술은 안 마셨어요.",
+    "purpose": "question",
+    "explain": false,
+    "delivery_verified": true
+  },
+  {
+    "turn": 15,
+    "action": "SAY",
+    "content": "오늘 졸피뎀 총 몇 알 드셨나요?",
+    "reply": "오늘은 새벽에 두 알만 먹었어요.",
+    "purpose": "question",
+    "explain": false,
+    "delivery_verified": true
+  },
+  {
+    "turn": 16,
+    "action": "SAY",
+    "content": "지금 평소보다 심하게 졸리거나 깨우기 어렵나요?",
+    "reply": "평소보다 심하게 졸리진 않아요.",
+    "purpose": "question",
+    "explain": false,
+    "delivery_verified": true
+  },
+  {
+    "turn": 17,
+    "action": "SAY",
+    "content": "하루 여섯 알씩 복용한 지 얼마나 되셨나요?",
+    "reply": "요즘 들어 여섯 알 먹는 날이 많아요.",
+    "purpose": "question",
+    "explain": false,
+    "delivery_verified": true
+  },
+  {
+    "turn": 18,
+    "action": "SAY",
+    "content": "최근 일주일 중 하루 여섯 알 드신 날은 며칠인가요?",
+    "reply": "일주일에 닷새 정도예요.",
+    "purpose": "question",
+    "explain": false,
+    "delivery_verified": true
+  },
+  {
+    "turn": 19,
+    "action": "SAY",
+    "content": "하루 여섯 알씩 주 5일 복용한 건 얼마나 됐나요?",
+    "reply": "한 석 달쯤 됐어요.",
+    "purpose": "question",
+    "explain": false,
+    "delivery_verified": true
+  },
+  {
+    "turn": 20,
+    "action": "SAY",
+    "content": "졸피뎀을 줄이거나 거르면 어떤 증상이 생기나요?",
+    "reply": "잠이 안 오고 불안해요.",
+    "purpose": "question",
+    "explain": false,
+    "delivery_verified": true
+  },
+  {
+    "turn": 21,
+    "action": "SAY",
+    "content": "불면으로 이전에 받아보신 치료가 있나요?",
+    "reply": "7년째 병원에서 수면제 받아 먹어요.",
+    "purpose": "question",
+    "explain": false,
+    "delivery_verified": true
+  },
+  {
+    "turn": 22,
+    "action": "EXAM",
+    "content": "사람·장소·시간의 지남력을 확인하겠습니다",
+    "reply": "명료, 지남력 3/3점",
+    "purpose": "question",
+    "explain": false
+  },
+  {
+    "turn": 23,
+    "action": "SAY",
+    "content": "오늘 졸피뎀을 일부러 많이 드셨나요?",
+    "reply": "아뇨, 잠이 안 와서 먹었어요.",
+    "purpose": "question",
+    "explain": false,
+    "delivery_verified": true
+  },
+  {
+    "turn": 24,
+    "action": "SAY",
+    "content": "줄이거나 거를 때 경련한 적 있나요?",
+    "reply": "아뇨, 경련한 적은 없어요.",
+    "purpose": "question",
+    "explain": false,
+    "delivery_verified": true
+  },
+  {
+    "turn": 25,
+    "action": "SAY",
+    "content": "지금 숨쉬기 힘드신가요?",
+    "reply": "아뇨, 숨쉬기는 괜찮아요.",
+    "purpose": "question",
+    "explain": false,
+    "delivery_verified": true
+  },
+  {
+    "turn": 26,
+    "action": "SAY",
+    "content": "평소 함께 드시는 수면제나 진정제가 있나요?",
+    "reply": "가끔 약국 수면유도제도 먹어요.",
+    "purpose": "question",
+    "explain": false,
+    "delivery_verified": true
+  },
+  {
+    "turn": 27,
+    "action": "SAY",
+    "content": "약국 수면유도제 이름과 용량이 어떻게 되나요?",
+    "reply": "이름은 모르고 한 알씩 먹어요.",
+    "purpose": "question",
+    "explain": false,
+    "delivery_verified": true
+  },
+  {
+    "turn": 28,
+    "action": "SAY",
+    "content": "오늘 약국 수면유도제도 드셨나요?",
+    "reply": "아뇨, 오늘은 안 먹었어요.",
+    "purpose": "question",
+    "explain": false,
+    "delivery_verified": true
+  },
+  {
+    "turn": 29,
+    "action": "SAY",
+    "content": "약물 알레르기가 있으신가요?",
+    "reply": "아뇨, 약 알레르기는 없어요.",
+    "purpose": "question",
+    "explain": false,
+    "delivery_verified": true
+  }
+]

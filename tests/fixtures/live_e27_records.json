@@ -1,0 +1,1341 @@
+[
+  {
+    "case": "C01",
+    "initial": {
+      "opening": "저는 박선희이고, 예순두 살 여자이다. 잠을 잘 못 자서 병원에 왔다. 수면제를 처방해 달라고 왔다.",
+      "vital_signs": "혈압 : 128/78 mmHg\n맥박 : 76 회/분\n호흡 : 18 회/분\n체온 : 36.6°C"
+    },
+    "events": [
+      {
+        "turn": 1,
+        "action": "SAY",
+        "content": "잠을 못 주무신 건 언제부터인가요?",
+        "reply": "7년 전부터 잠을 잘 못 잤어요."
+      },
+      {
+        "turn": 2,
+        "action": "SAY",
+        "content": "잠들기 어렵나요, 자주 깨나요?",
+        "reply": "잠들기도 어렵고 자주 깨요."
+      },
+      {
+        "turn": 3,
+        "action": "SAY",
+        "content": "일주일에 며칠 정도 잠을 설치세요?",
+        "reply": "약 없이는 매일 잠을 설쳐요."
+      },
+      {
+        "turn": 4,
+        "action": "SAY",
+        "content": "낮 동안 피로하거나 일상생활에 지장이 있나요?",
+        "reply": "낮에 졸려 집안일하다 깜빡 자요."
+      },
+      {
+        "turn": 5,
+        "action": "SAY",
+        "content": "현재 복용 중인 수면제가 무엇인가요?",
+        "reply": "스틸녹스, 졸피뎀이라고 해요."
+      },
+      {
+        "turn": 6,
+        "action": "SAY",
+        "content": "졸피뎀은 한 번에 몇 mg씩 드시나요?",
+        "reply": "밤엔 40mg, 새벽엔 20mg요."
+      },
+      {
+        "turn": 7,
+        "action": "SAY",
+        "content": "그 용량으로 얼마나 복용하셨나요?",
+        "reply": "최근 1년 새 서너 알로 늘었어요."
+      },
+      {
+        "turn": 8,
+        "action": "SAY",
+        "content": "졸피뎀은 처방받은 용량대로 드시나요?",
+        "reply": "아니요, 처방보다 더 먹어요."
+      },
+      {
+        "turn": 9,
+        "action": "SAY",
+        "content": "오늘 졸피뎀은 언제, 얼마나 드셨나요?",
+        "reply": "오늘 낮에는 아직 안 먹었어요."
+      },
+      {
+        "turn": 10,
+        "action": "SAY",
+        "content": "지금 깨우기 어렵거나 숨이 가쁘진 않나요?",
+        "reply": "아니요, 정신은 또렷해요."
+      },
+      {
+        "turn": 11,
+        "action": "SAY",
+        "content": "마지막 졸피뎀은 언제 몇 mg 드셨나요?",
+        "reply": "새벽 두세 시에 20mg 먹었어요."
+      },
+      {
+        "turn": 12,
+        "action": "SAY",
+        "content": "어젯밤 술이나 다른 진정제를 함께 드셨나요?",
+        "reply": "아니요, 수면제만 먹었어요."
+      },
+      {
+        "turn": 13,
+        "action": "SAY",
+        "content": "처방된 하루 용량은 얼마인가요?",
+        "reply": "하루 한 알, 10mg이에요."
+      },
+      {
+        "turn": 14,
+        "action": "SAY",
+        "content": "졸피뎀 외에 복용하는 약이 있나요?",
+        "reply": "혈압약 암로디핀을 먹어요."
+      },
+      {
+        "turn": 15,
+        "action": "SAY",
+        "content": "7년 전 잠이 나빠지기 시작한 계기가 있었나요?",
+        "reply": "특별한 계기는 없었어요."
+      },
+      {
+        "turn": 16,
+        "action": "SAY",
+        "content": "약을 줄이거나 거르면 어떤 증상이 생기나요?",
+        "reply": "불안하고 손이 떨려요."
+      },
+      {
+        "turn": 17,
+        "action": "SAY",
+        "content": "약을 줄이거나 거른 뒤 발작이나 환각이 있었나요?",
+        "reply": "아니요, 그런 적은 없어요."
+      },
+      {
+        "turn": 18,
+        "action": "SAY",
+        "content": "죽고 싶거나 자신을 해칠 생각이 있나요?",
+        "reply": "아니요, 그런 생각은 없어요."
+      },
+      {
+        "turn": 19,
+        "action": "SAY",
+        "content": "고혈압 외에 앓고 계신 병이 있나요?",
+        "reply": "아니요, 다른 병은 없어요."
+      },
+      {
+        "turn": 20,
+        "action": "SAY",
+        "content": "최근 우울하거나 불안한 기분이 자주 드세요?",
+        "reply": "약이 떨어질까 봐 자주 불안해요."
+      },
+      {
+        "turn": 21,
+        "action": "SAY",
+        "content": "복용 후 기억이 끊기거나 넘어지신 적 있나요?",
+        "reply": "약 먹고 기억이 안 날 때가 있어요."
+      },
+      {
+        "turn": 22,
+        "action": "SAY",
+        "content": "평소 술은 얼마나 자주 드세요?",
+        "reply": "일 년에 몇 번, 소주 한두 잔요."
+      },
+      {
+        "turn": 23,
+        "action": "SAY",
+        "content": "졸릴 때 운전하신 적 있나요?",
+        "reply": "아니요, 졸릴 땐 운전 안 해요."
+      },
+      {
+        "turn": 24,
+        "action": "SAY",
+        "content": "평소 몇 시에 주무시고 몇 시에 일어나세요?",
+        "reply": "밤 11시에 눕고 7시에 일어나요."
+      },
+      {
+        "turn": 25,
+        "action": "SAY",
+        "content": "최근 하루 총 몇 mg 드시나요?",
+        "reply": "하루 60~70mg 먹어요."
+      },
+      {
+        "turn": 26,
+        "action": "SAY",
+        "content": "약물이나 음식 알레르기가 있으신가요?",
+        "reply": "아니요, 알레르기는 없어요."
+      },
+      {
+        "turn": 27,
+        "action": "SAY",
+        "content": "지금 손 떨림이나 식은땀이 있나요?",
+        "reply": "지금은 떨림이나 식은땀 없어요."
+      },
+      {
+        "turn": 28,
+        "action": "SAY",
+        "content": "약 복용 후 넘어지신 적도 있나요?",
+        "reply": "아니요, 넘어진 적은 없어요."
+      },
+      {
+        "turn": 29,
+        "action": "SAY",
+        "content": "졸피뎀 외에 진정제나 마약성 진통제를 복용하시나요?",
+        "reply": "가끔 수면유도제도 같이 먹어요."
+      },
+      {
+        "turn": 30,
+        "action": "SAY",
+        "content": "같이 드시는 수면유도제 이름이 무엇인가요?",
+        "reply": "약 이름은 잘 모르겠어요."
+      },
+      {
+        "turn": 31,
+        "action": "SAY",
+        "content": "수면유도제는 얼마나 자주 함께 드세요?",
+        "reply": "한 달에 한두 번쯤 같이 먹어요."
+      },
+      {
+        "turn": 32,
+        "action": "EXAM",
+        "content": "gen_mental_status",
+        "reply": "명료, 지남력 3/3점"
+      },
+      {
+        "turn": 33,
+        "action": "SAY",
+        "content": "졸피뎀은 주로 어디서 처방받으세요?",
+        "reply": "여러 내과, 신경과, 정신과요."
+      },
+      {
+        "turn": 34,
+        "action": "EXAM",
+        "content": "bex_gait",
+        "reply": "보폭 정상, 절뚝임(-), 불균형(-)"
+      },
+      {
+        "turn": 35,
+        "action": "SAY",
+        "content": "주무실 때 코골이나 숨 멎음이 있나요?",
+        "reply": "코골이나 숨 멎는 건 없대요."
+      },
+      {
+        "turn": 36,
+        "action": "SAY",
+        "content": "코골이 없어도 졸피뎀 사용장애가 가장 우려됩니다.",
+        "reply": "약을 줄이고 싶지만 겁나요."
+      },
+      {
+        "turn": 37,
+        "action": "SAY",
+        "content": "감량 때 떨림이 있어 오늘 의료진 감독하에 줄이세요",
+        "reply": "네, 잠을 못 잘까 봐 겁나요."
+      },
+      {
+        "turn": 38,
+        "action": "SAY",
+        "content": "오늘 복용약과 증상을 확인해 안전한 감량을 정할게요.",
+        "reply": "네, 안전하게 줄이고 싶어요."
+      },
+      {
+        "turn": 39,
+        "action": "SAY",
+        "content": "오늘은 혼자 줄이지 말고 의료진과 함께하세요.",
+        "reply": "네, 혼자 줄이지 않을게요."
+      },
+      {
+        "turn": 40,
+        "action": "SAY",
+        "content": "호흡이 느리거나 깨우기 어려우면 119에 연락하세요.",
+        "reply": "네, 그러면 바로 119 부를게요."
+      }
+    ],
+    "stories": [
+      {
+        "cc": "불면",
+        "onset": "7년 전",
+        "hpi": "62세 여성. 7년 전부터 특별한 계기 없이 잠들기 어렵고 자주 깨며, 약 없이는 매일 잠을 설침. 밤 11시에 누워 오전 7시에 일어나며, 낮에 졸려 집안일 중 깜빡 잠듦. 졸피뎀 처방량은 하루 10mg 1알이나 처방보다 더 복용하며, 최근 하루 60~70mg 복용한다고 함. 밤에 40mg, 새벽에 20mg 복용하고 최근 1년 사이 3~4알로 늘었다고 함. 오늘 낮에는 복용하지 않았고, 마지막 복용은 새벽 2~3시에 20mg임. 약을 줄이거나 거르면 불안하고 손이 떨리며, 약이 떨어질까 봐 자주 불안하고 복용 후 기억이 나지 않을 때가 있음. 약을 줄이고 싶으나 잠을 못 잘까 봐 걱정하여 내원함.",
+        "medicine": "스틸녹스(졸피뎀): 처방은 하루 10mg 1알이나 처방보다 더 복용함. 최근 하루 60~70mg, 밤 40mg 및 새벽 20mg 복용한다고 함. 오늘 낮에는 복용하지 않았고 새벽 2~3시에 20mg 복용함. 여러 내과·신경과·정신과에서 처방받음. 암로디핀 복용(용량 미상). 이름을 모르는 수면유도제를 한 달에 1~2회 함께 복용함.",
+        "pmh_others": "고혈압. 그 외 질환은 없다고 함. 약물·음식 알레르기 없다고 함.",
+        "fh_others": "",
+        "sh_others": "음주: 1년에 몇 번, 소주 1~2잔. 졸릴 때 운전하지 않는다고 함.",
+        "ros_others": "약을 줄이거나 거르면 불안(+), 손 떨림(+); 현재 손 떨림(-), 식은땀(-); 감량·중단 후 발작(-), 환각(-); 자살·자해 생각(-); 복용 후 기억 소실(+), 넘어짐(-); 코골이(-), 숨 멎음(-)"
+      },
+      {
+        "cc": "불면",
+        "onset": "7년 전",
+        "hpi": "62세 여자. 7년 전부터 잠들기 어렵고 자주 깨며, 약 없이는 매일 잠을 설침. 밤 11시에 눕고 오전 7시에 일어남. 낮에 졸려 집안일을 하다가 깜빡 잠들며, 약이 떨어질까 봐 자주 불안하고 약을 줄이고 싶지만 잠을 못 잘까 봐 걱정됨. 특별한 시작 계기는 없었음. 수면제 처방을 원하여 내원함.",
+        "medicine": "졸피뎀(스틸녹스): 처방은 하루 1알(10mg)이지만 처방보다 많이 복용함. 밤에 40mg, 새벽에 20mg 복용하며 최근 1년 새 서너 알로 늘었고, 최근 하루 60~70mg 복용함. 마지막 복용은 새벽 2~3시 20mg이며 오늘 낮에는 복용하지 않음. 암로디핀 복용(용량·횟수 미상). 이름을 모르는 수면유도제를 한 달에 1~2회 함께 복용함.",
+        "pmh_others": "고혈압. 그 외 다른 병은 없다고 함. 약물·음식 알레르기 없다고 함.",
+        "fh_others": "",
+        "sh_others": "음주: 일 년에 몇 번, 소주 1~2잔. 졸릴 때 운전하지 않음.",
+        "ros_others": "낮 졸림(+), 약을 줄이거나 거르면 불안·손 떨림(+), 약 복용 후 기억 끊김(+), 발작(-), 환각(-), 자살·자해 생각(-), 현재 손 떨림(-), 식은땀(-), 낙상(-), 코골이(-), 수면 중 숨 멎음(-)"
+      }
+    ],
+    "proposed_marks": {
+      "pmh_dm": {
+        "mark": "-",
+        "turn": 19,
+        "quote": "아니요, 다른 병은 없어요."
+      },
+      "pmh_htn": {
+        "mark": "+",
+        "turn": 14,
+        "quote": "혈압약 암로디핀을 먹어요."
+      },
+      "pmh_stroke": {
+        "mark": "-",
+        "turn": 19,
+        "quote": "아니요, 다른 병은 없어요."
+      },
+      "pmh_tbc": {
+        "mark": "-",
+        "turn": 19,
+        "quote": "아니요, 다른 병은 없어요."
+      },
+      "pmh_hepatitis": {
+        "mark": "-",
+        "turn": 19,
+        "quote": "아니요, 다른 병은 없어요."
+      },
+      "pmh_heart": {
+        "mark": "-",
+        "turn": 19,
+        "quote": "아니요, 다른 병은 없어요."
+      },
+      "pmh_dyslipidemia": {
+        "mark": "-",
+        "turn": 19,
+        "quote": "아니요, 다른 병은 없어요."
+      },
+      "pmh_op": {
+        "mark": "",
+        "turn": null,
+        "quote": ""
+      },
+      "pmh_allergy": {
+        "mark": "-",
+        "turn": 26,
+        "quote": "아니요, 알레르기는 없어요."
+      },
+      "fh_dm": {
+        "mark": "",
+        "turn": null,
+        "quote": ""
+      },
+      "fh_htn": {
+        "mark": "",
+        "turn": null,
+        "quote": ""
+      },
+      "fh_stroke": {
+        "mark": "",
+        "turn": null,
+        "quote": ""
+      },
+      "sh_smoking": {
+        "mark": "",
+        "turn": null,
+        "quote": ""
+      },
+      "sh_alcohol": {
+        "mark": "+",
+        "turn": 22,
+        "quote": "일 년에 몇 번, 소주 한두 잔요."
+      },
+      "ros_weakness": {
+        "mark": "",
+        "turn": null,
+        "quote": ""
+      },
+      "ros_fatigue": {
+        "mark": "",
+        "turn": null,
+        "quote": ""
+      },
+      "ros_headache": {
+        "mark": "",
+        "turn": null,
+        "quote": ""
+      },
+      "ros_dizziness": {
+        "mark": "",
+        "turn": null,
+        "quote": ""
+      },
+      "ros_chest_pain": {
+        "mark": "",
+        "turn": null,
+        "quote": ""
+      },
+      "ros_palpitation": {
+        "mark": "",
+        "turn": null,
+        "quote": ""
+      },
+      "ros_fever": {
+        "mark": "",
+        "turn": null,
+        "quote": ""
+      },
+      "ros_chill": {
+        "mark": "",
+        "turn": null,
+        "quote": ""
+      },
+      "ros_cough": {
+        "mark": "",
+        "turn": null,
+        "quote": ""
+      },
+      "ros_sputum": {
+        "mark": "",
+        "turn": null,
+        "quote": ""
+      },
+      "ros_rhinorrhea": {
+        "mark": "",
+        "turn": null,
+        "quote": ""
+      },
+      "ros_abdominal_pain": {
+        "mark": "",
+        "turn": null,
+        "quote": ""
+      },
+      "ros_melena": {
+        "mark": "",
+        "turn": null,
+        "quote": ""
+      },
+      "ros_hematochezia": {
+        "mark": "",
+        "turn": null,
+        "quote": ""
+      },
+      "ros_hematemesis": {
+        "mark": "",
+        "turn": null,
+        "quote": ""
+      },
+      "ros_anorexia": {
+        "mark": "",
+        "turn": null,
+        "quote": ""
+      },
+      "ros_nausea": {
+        "mark": "",
+        "turn": null,
+        "quote": ""
+      },
+      "ros_vomiting": {
+        "mark": "",
+        "turn": null,
+        "quote": ""
+      },
+      "ros_diarrhea": {
+        "mark": "",
+        "turn": null,
+        "quote": ""
+      },
+      "ros_constipation": {
+        "mark": "",
+        "turn": null,
+        "quote": ""
+      },
+      "plan_update": null
+    },
+    "expected_valid_marks": {
+      "pmh_allergy": "-",
+      "sh_alcohol": "+"
+    }
+  },
+  {
+    "case": "C03",
+    "initial": {
+      "opening": "이름은 김도현이고, 여섯 살 남자아이이다. 엄마 김지영, 서른일곱 살이 보호자로 함께 왔다. 엄마는 도현이 키가 또래에 비해 많이 작은 것 같아 걱정이 된다고 말했다. 어린이집에서 같은 반 친구들보다 도현이 키가 확실히 작아 보인다고 한다. 엄마는 일 년 전부터 주변에서 도현이가 또래보다 작다는 말을 듣기 시작했다고 했다. 특히 최근 육 개월에서 일 년 사이에 키가 별로 크지 않은 것 같다고 느꼈다. 엄마가 집에서 키를 재보니, 일 년 전에는 백 센티미터였고 지금은 백오 센티미터 정도였다. 일 년 동안 오 센티미터 정도 자랐다. 몸무게는 일 년 전 십오 키로그람에서 지금은 십육 점 오 키로그람으로 일 점 오 키로그람 늘었다.",
+      "vital_signs": "혈압: 100/60 mmHg\n맥박: 90회/분\n호흡: 20회/분\n체온: 36.7°C"
+    },
+    "events": [
+      {
+        "turn": 1,
+        "action": "SAY",
+        "content": "요즘 식욕과 식사량은 어떤가요?",
+        "reply": "식욕 좋고 세 끼 잘 먹어요."
+      },
+      {
+        "turn": 2,
+        "action": "SAY",
+        "content": "배 아픔이나 설사가 자주 있나요?",
+        "reply": "배 아프거나 설사하진 않아요."
+      },
+      {
+        "turn": 3,
+        "action": "SAY",
+        "content": "그동안 큰 병을 앓거나 수술한 적이 있나요?",
+        "reply": "큰 병도 수술한 적도 없어요."
+      },
+      {
+        "turn": 4,
+        "action": "SAY",
+        "content": "엄마와 아빠 키가 각각 어떻게 되나요?",
+        "reply": "엄마 165, 아빠 178cm예요."
+      },
+      {
+        "turn": 5,
+        "action": "SAY",
+        "content": "예정일에 태어났고,",
+        "reply": "네, 만삭에 태어났어요."
+      },
+      {
+        "turn": 6,
+        "action": "SAY",
+        "content": "태어날 때 몸무게는 몇 kg이었나요?",
+        "reply": "3.2kg이었어요."
+      },
+      {
+        "turn": 7,
+        "action": "SAY",
+        "content": "현재 정기적으로 먹는 약이 있나요?",
+        "reply": "아니요, 먹는 약 없어요."
+      },
+      {
+        "turn": 8,
+        "action": "SAY",
+        "content": "이전 건강검진의 키 기록이 있나요?",
+        "reply": "네, 집에 검진 수첩이 있어요."
+      },
+      {
+        "turn": 9,
+        "action": "SAY",
+        "content": "검진 수첩의 키와 측정 날짜를 알려주시겠어요?",
+        "reply": "두 살 83cm, 네 살 96cm요."
+      },
+      {
+        "turn": 10,
+        "action": "SAY",
+        "content": "검진 수첩에 적힌 측정 날짜가 언제인가요?",
+        "reply": "두 살, 네 살 생일 무렵이에요."
+      },
+      {
+        "turn": 11,
+        "action": "SAY",
+        "content": "가족 중 키가 작거나 성장 치료를 받은 분이 있나요?",
+        "reply": "아빠가 어릴 때 많이 작았어요."
+      },
+      {
+        "turn": 12,
+        "action": "SAY",
+        "content": "추위를 많이 타거나 변비가 있나요?",
+        "reply": "추위를 많이 타진 않아요."
+      },
+      {
+        "turn": 13,
+        "action": "SAY",
+        "content": "두통이나 시야 변화가 있나요?",
+        "reply": "두통은 없어요."
+      },
+      {
+        "turn": 14,
+        "action": "SAY",
+        "content": "시야가 흐려지거나 달라진 적 있나요?",
+        "reply": "아니요, 그런 적 없어요."
+      },
+      {
+        "turn": 15,
+        "action": "SAY",
+        "content": "약이나 음식 알레르기가 있나요?",
+        "reply": "약이나 음식 알레르기는 없어요."
+      },
+      {
+        "turn": 16,
+        "action": "SAY",
+        "content": "변비가 있거나 대변을 보기 힘든가요?",
+        "reply": "아니요, 변도 편하게 잘 봐요."
+      },
+      {
+        "turn": 17,
+        "action": "SAY",
+        "content": "물을 많이 마시거나 소변을 자주 보나요?",
+        "reply": "물을 많이 마시진 않아요."
+      },
+      {
+        "turn": 18,
+        "action": "SAY",
+        "content": "발달이나 운동·언어가 늦었던 적 있나요?",
+        "reply": "아니요, 발달은 또래와 비슷했어요."
+      },
+      {
+        "turn": 19,
+        "action": "SAY",
+        "content": "스테로이드 약을 먹거나 바른 적 있나요?",
+        "reply": "아니요, 먹거나 바른 적 없어요."
+      },
+      {
+        "turn": 20,
+        "action": "SAY",
+        "content": "도현이 생년월일이 언제인가요?",
+        "reply": "2020년 5월 12일이에요."
+      },
+      {
+        "turn": 21,
+        "action": "EXAM",
+        "content": "c02_anthropometry",
+        "reply": "신장 105cm, 체중 16.5kg, 머리둘레 52cm"
+      },
+      {
+        "turn": 22,
+        "action": "SAY",
+        "content": "아버지는 사춘기가 또래보다 늦게 왔나요?",
+        "reply": "네, 수염도 늦게 났대요."
+      },
+      {
+        "turn": 23,
+        "action": "SAY",
+        "content": "가족 중 갑상선 질환이 있나요?",
+        "reply": "아니요, 가족 중에는 없어요."
+      },
+      {
+        "turn": 24,
+        "action": "EXAM",
+        "content": "c02_body_proportion",
+        "reply": "상·하절 비율 정상, 양팔간격 불균형(-)"
+      },
+      {
+        "turn": 25,
+        "action": "SAY",
+        "content": "소변을 평소보다 자주 보나요?",
+        "reply": "아니요, 평소와 비슷해요."
+      },
+      {
+        "turn": 26,
+        "action": "EXAM",
+        "content": "hn_thyroid_palpation",
+        "reply": "비대(-), 결절(-), 압통(-)"
+      },
+      {
+        "turn": 27,
+        "action": "EXAM",
+        "content": "c02_pubertal_status",
+        "reply": "Tanner 1기, 고환 2mL/2mL"
+      },
+      {
+        "turn": 28,
+        "action": "SAY",
+        "content": "식사량은 충분해도 특정 음식을 제한하거나 피하나요?",
+        "reply": "조금 편식하지만 제한하진 않아요."
+      },
+      {
+        "turn": 29,
+        "action": "SAY",
+        "content": "쉽게 피곤해하거나 활동량이 줄었나요?",
+        "reply": "아니요, 늘 활발하게 잘 놀아요."
+      },
+      {
+        "turn": 30,
+        "action": "EXAM",
+        "content": "abd_liver_spleen_palpation",
+        "reply": "간 늑골연하 촉지(-), 비장 촉지(-)"
+      },
+      {
+        "turn": 31,
+        "action": "SAY",
+        "content": "태어날 때 키가 작다는 말을 들었나요?",
+        "reply": "아니요, 태어날 때 키는 50cm였어요."
+      },
+      {
+        "turn": 32,
+        "action": "SAY",
+        "content": "어머니 초경은 몇 살에 시작했나요?",
+        "reply": "열세 살에 시작했어요."
+      },
+      {
+        "turn": 33,
+        "action": "SAY",
+        "content": "성장 때문에 이전에 검사나 치료를 받은 적 있나요?",
+        "reply": "아니요, 검사나 치료는 안 받았어요."
+      },
+      {
+        "turn": 34,
+        "action": "SAY",
+        "content": "천식이나 신장질환 같은 만성질환이 있나요?",
+        "reply": "아니요, 만성질환은 없어요."
+      },
+      {
+        "turn": 36,
+        "action": "SAY",
+        "content": "만성질환은 없어도 키가 많이 작아 원인 확인이 필요해요",
+        "reply": "네, 걱정되네요."
+      },
+      {
+        "turn": 37,
+        "action": "SAY",
+        "content": "걱정되시죠, 키가 작아 원인을 확인할게요.",
+        "reply": "네, 잘 확인해 주세요."
+      },
+      {
+        "turn": 38,
+        "action": "SAY",
+        "content": "성장기록과 혈액·골연령 검사로 원인을 확인하겠습니다.",
+        "reply": "네, 검사받아 볼게요."
+      },
+      {
+        "turn": 39,
+        "action": "SAY",
+        "content": "검사 결과를 확인하도록 4~6주 뒤 다시 뵐게요.",
+        "reply": "네, 그때 다시 올게요."
+      },
+      {
+        "turn": 40,
+        "action": "SAY",
+        "content": "심한 두통·시야 변화·반복 구토 땐 응급실로 오세요.",
+        "reply": "네, 그러면 바로 응급실 갈게요."
+      }
+    ],
+    "stories": [
+      {
+        "cc": "또래보다 작은 키",
+        "onset": "1년 전",
+        "hpi": "6세 남아. 생년월일은 2020년 5월 12일. 1년 전부터 주변에서 또래보다 작다는 말을 들었고, 어린이집 같은 반 친구들보다 확실히 작아 보인다고 함. 특히 최근 6개월~1년 사이 키가 별로 크지 않은 것 같다고 느낌. 집에서 잰 키는 1년 전 100cm, 현재 약 105cm로 1년간 약 5cm 성장했으며, 체중은 15kg에서 16.5kg으로 1.5kg 증가함. 검진 수첩상 2세 생일 무렵 83cm, 4세 생일 무렵 96cm. 식욕 좋고 하루 세 끼 잘 먹음. 키가 작아 걱정되어 원인 확인 위해 내원함",
+        "medicine": "정기 복용약 없음",
+        "pmh_others": "만삭 출생, 출생 체중 3.2kg, 출생 키 50cm. 큰 병, 수술, 만성질환 없고 발달은 또래와 비슷했음. 성장 관련 검사나 치료를 받은 적 없음. 스테로이드 복용·도포력 없음. 약물·음식 알레르기 없음",
+        "fh_others": "어머니 키 165cm, 아버지 키 178cm. 아버지가 어릴 때 많이 작았고 수염도 늦게 났다고 함. 어머니 초경 13세. 가족 중 갑상선 질환 없음",
+        "sh_others": "조금 편식하지만 음식을 제한하지 않음. 활발하게 잘 놂",
+        "ros_others": "복통(-), 설사(-), 추위를 많이 탐(-), 변비(-), 두통(-), 시야 흐림·변화(-), 물을 많이 마시지 않음, 빈뇨(-), 피로(-)"
+      },
+      {
+        "cc": "키가 작음",
+        "onset": "1년 전",
+        "hpi": "6세 남아로, 1년 전부터 주변에서 또래보다 작다는 말을 듣기 시작했고 어린이집에서도 같은 반 친구들보다 확실히 작아 보인다고 함. 특히 최근 6개월~1년 사이 키가 별로 크지 않은 것 같다고 느낌. 집에서 잰 키는 1년 전 100cm, 현재 약 105cm로 1년간 약 5cm 자랐으며, 체중은 1년 전 15kg에서 현재 16.5kg으로 늘었다고 함. 검진 수첩상 2세 생일 무렵 83cm, 4세 생일 무렵 96cm였음. 식욕이 좋고 세 끼 잘 먹으며 조금 편식하지만 음식을 제한하지는 않음. 키가 작아 걱정되어 원인 확인을 위해 내원함.",
+        "medicine": "정기 복용약 없음.",
+        "pmh_others": "만삭 출생, 출생 체중 3.2kg, 출생 키 50cm. 큰 병, 수술, 만성질환 없고 성장 관련 검사나 치료를 받은 적 없음. 발달은 또래와 비슷했음. 스테로이드 복용 또는 도포력 없음. 약물·음식 알레르기 없음.",
+        "fh_others": "어머니 키 165cm, 아버지 키 178cm. 아버지가 어릴 때 많이 작았고 수염도 늦게 났다고 함. 어머니 초경은 13세. 가족 중 갑상선 질환 없음.",
+        "sh_others": "활발하게 잘 논다고 함.",
+        "ros_others": "복통(-), 설사(-), 추위 민감(-), 두통(-), 시야 변화(-), 변비(-), 물을 많이 마심(-), 소변 횟수 증가(-), 피로 또는 활동량 감소(-)"
+      }
+    ],
+    "proposed_marks": {
+      "pmh_dm": {
+        "mark": "",
+        "turn": null,
+        "quote": ""
+      },
+      "pmh_htn": {
+        "mark": "",
+        "turn": null,
+        "quote": ""
+      },
+      "pmh_stroke": {
+        "mark": "",
+        "turn": null,
+        "quote": ""
+      },
+      "pmh_tbc": {
+        "mark": "",
+        "turn": null,
+        "quote": ""
+      },
+      "pmh_hepatitis": {
+        "mark": "",
+        "turn": null,
+        "quote": ""
+      },
+      "pmh_heart": {
+        "mark": "",
+        "turn": null,
+        "quote": ""
+      },
+      "pmh_dyslipidemia": {
+        "mark": "",
+        "turn": null,
+        "quote": ""
+      },
+      "pmh_op": {
+        "mark": "-",
+        "turn": 3,
+        "quote": "큰 병도 수술한 적도 없어요."
+      },
+      "pmh_allergy": {
+        "mark": "-",
+        "turn": 15,
+        "quote": "약이나 음식 알레르기는 없어요."
+      },
+      "fh_dm": {
+        "mark": "",
+        "turn": null,
+        "quote": ""
+      },
+      "fh_htn": {
+        "mark": "",
+        "turn": null,
+        "quote": ""
+      },
+      "fh_stroke": {
+        "mark": "",
+        "turn": null,
+        "quote": ""
+      },
+      "sh_smoking": {
+        "mark": "",
+        "turn": null,
+        "quote": ""
+      },
+      "sh_alcohol": {
+        "mark": "",
+        "turn": null,
+        "quote": ""
+      },
+      "ros_weakness": {
+        "mark": "",
+        "turn": null,
+        "quote": ""
+      },
+      "ros_fatigue": {
+        "mark": "-",
+        "turn": 29,
+        "quote": "아니요, 늘 활발하게 잘 놀아요."
+      },
+      "ros_headache": {
+        "mark": "-",
+        "turn": 13,
+        "quote": "두통은 없어요."
+      },
+      "ros_dizziness": {
+        "mark": "",
+        "turn": null,
+        "quote": ""
+      },
+      "ros_chest_pain": {
+        "mark": "",
+        "turn": null,
+        "quote": ""
+      },
+      "ros_palpitation": {
+        "mark": "",
+        "turn": null,
+        "quote": ""
+      },
+      "ros_fever": {
+        "mark": "",
+        "turn": null,
+        "quote": ""
+      },
+      "ros_chill": {
+        "mark": "",
+        "turn": null,
+        "quote": ""
+      },
+      "ros_cough": {
+        "mark": "",
+        "turn": null,
+        "quote": ""
+      },
+      "ros_sputum": {
+        "mark": "",
+        "turn": null,
+        "quote": ""
+      },
+      "ros_rhinorrhea": {
+        "mark": "",
+        "turn": null,
+        "quote": ""
+      },
+      "ros_abdominal_pain": {
+        "mark": "-",
+        "turn": 2,
+        "quote": "배 아프거나 설사하진 않아요."
+      },
+      "ros_melena": {
+        "mark": "",
+        "turn": null,
+        "quote": ""
+      },
+      "ros_hematochezia": {
+        "mark": "",
+        "turn": null,
+        "quote": ""
+      },
+      "ros_hematemesis": {
+        "mark": "",
+        "turn": null,
+        "quote": ""
+      },
+      "ros_anorexia": {
+        "mark": "-",
+        "turn": 1,
+        "quote": "식욕 좋고 세 끼 잘 먹어요."
+      },
+      "ros_nausea": {
+        "mark": "",
+        "turn": null,
+        "quote": ""
+      },
+      "ros_vomiting": {
+        "mark": "",
+        "turn": null,
+        "quote": ""
+      },
+      "ros_diarrhea": {
+        "mark": "-",
+        "turn": 2,
+        "quote": "배 아프거나 설사하진 않아요."
+      },
+      "ros_constipation": {
+        "mark": "-",
+        "turn": 16,
+        "quote": "아니요, 변도 편하게 잘 봐요."
+      },
+      "plan_update": null
+    },
+    "expected_valid_marks": {
+      "pmh_op": "-",
+      "pmh_allergy": "-",
+      "ros_fatigue": "-",
+      "ros_headache": "-",
+      "ros_abdominal_pain": "-",
+      "ros_anorexia": "-",
+      "ros_diarrhea": "-",
+      "ros_constipation": "-"
+    }
+  },
+  {
+    "case": "C10",
+    "initial": {
+      "opening": "이름은 최윤정이고, 나는 서른두 살 여자이다. 최근 석 달 동안 살이 많이 빠져서 병원에 오게 되었다. 원래 몸무게는 오십육 키로그람 정도였는데, 최근 석 달 사이에 칠 키로그람 정도 빠져서 지금은 사십구 키로그람 정도이다. 평소에는 몸무게 변화가 거의 없었는데, 이번에는 다이어트나 운동을 한 것도 아닌데 저절로 살이 빠져서 걱정이 되었다. 키는 백육십사 센티미터이다.",
+      "vital_signs": "혈압 : 138/72 mmHg\n맥박 : 102 회/분\n호흡 : 19 회/분\n체온 : 36.9°C"
+    },
+    "events": [
+      {
+        "turn": 1,
+        "action": "SAY",
+        "content": "살이 빠지는 동안 식욕은 어떻게 변했나요?",
+        "reply": "오히려 식욕이 더 좋아졌어요."
+      },
+      {
+        "turn": 2,
+        "action": "SAY",
+        "content": "두근거림이나 손 떨림도 있나요?",
+        "reply": "네, 두근거리고 손도 떨려요."
+      },
+      {
+        "turn": 3,
+        "action": "SAY",
+        "content": "더위를 유난히 타거나 땀이 늘었나요?",
+        "reply": "네, 더위를 타고 땀도 늘었어요."
+      },
+      {
+        "turn": 4,
+        "action": "SAY",
+        "content": "최근 대변 횟수나 양상이 달라졌나요?",
+        "reply": "하루 두세 번, 전보다 묽게 봐요."
+      },
+      {
+        "turn": 5,
+        "action": "SAY",
+        "content": "두근거릴 때 가슴 통증이나 숨참도 있나요?",
+        "reply": "가슴 통증 없고, 움직이면 숨차요."
+      },
+      {
+        "turn": 6,
+        "action": "SAY",
+        "content": "숨찬 증상은 언제부터,",
+        "reply": "두세 달 전부터 숨이 차요."
+      },
+      {
+        "turn": 7,
+        "action": "SAY",
+        "content": "숨이 차서 걷기나 계단 오르기가 얼마나 힘든가요?",
+        "reply": "조금만 걸어도 힘들고 계단도 버거워요."
+      },
+      {
+        "turn": 8,
+        "action": "SAY",
+        "content": "가만히 있어도 숨이 차거나 누우면 더 심해지나요?",
+        "reply": "가만히 있거나 누우면 괜찮아요."
+      },
+      {
+        "turn": 9,
+        "action": "SAY",
+        "content": "숨찰 때 어지럽거나 실신한 적이 있나요?",
+        "reply": "어지럽거나 쓰러진 적은 없어요."
+      },
+      {
+        "turn": 10,
+        "action": "SAY",
+        "content": "과거에 앓거나 치료받은 병이 있나요?",
+        "reply": "아니요, 앓거나 치료받은 병은 없어요."
+      },
+      {
+        "turn": 11,
+        "action": "SAY",
+        "content": "현재 복용 중인 약이나 건강식품이 있나요?",
+        "reply": "아니요, 약이나 건강식품 안 먹어요."
+      },
+      {
+        "turn": 12,
+        "action": "SAY",
+        "content": "최근 생리 주기나 양이 달라졌나요?",
+        "reply": "두 달째 양이 줄고 기간도 짧아졌어요."
+      },
+      {
+        "turn": 13,
+        "action": "SAY",
+        "content": "가족 중 갑상샘 질환이 있나요?",
+        "reply": "어머니가 갑상샘 저하증이세요."
+      },
+      {
+        "turn": 14,
+        "action": "SAY",
+        "content": "약이나 음식 알레르기가 있나요?",
+        "reply": "아니요, 알레르기는 없어요."
+      },
+      {
+        "turn": 15,
+        "action": "SAY",
+        "content": "담배를 피우시나요?",
+        "reply": "아니요, 담배는 안 피워요."
+      },
+      {
+        "turn": 16,
+        "action": "EXAM",
+        "content": "hn_thyroid_palpation",
+        "reply": "양측 대칭성 미만성 비대(+, 정상의 약 2배), 표면 매끈, 결절(-), 압통(-)"
+      },
+      {
+        "turn": 17,
+        "action": "EXAM",
+        "content": "ch_heart_auscultation",
+        "reply": "S1·S2 명료, 규칙적 102회/분, 수축기 심잡음 Gr.2/6(흉골좌연)"
+      },
+      {
+        "turn": 18,
+        "action": "SAY",
+        "content": "술은 얼마나 자주 드시나요?",
+        "reply": "한 달에 한두 번 가볍게 마셔요."
+      },
+      {
+        "turn": 19,
+        "action": "SAY",
+        "content": "눈이 뻑뻑하거나 튀어나온 느낌이 있나요?",
+        "reply": "네, 뻑뻑하고 좀 튀어나온 듯해요."
+      },
+      {
+        "turn": 20,
+        "action": "EXAM",
+        "content": "bex_postural_tremor",
+        "reply": "자세성 떨림(+/+)"
+      },
+      {
+        "turn": 22,
+        "action": "EXAM",
+        "content": "hn_thyroid_eye_signs",
+        "reply": "돌출(+/+), 안검 지연(+/+), 안검 후퇴(+/+)"
+      },
+      {
+        "turn": 23,
+        "action": "SAY",
+        "content": "팔이나 허벅지에 힘이 빠지거나 계단 오르기 힘든가요?",
+        "reply": "네, 다리에 힘이 빠져 계단이 힘들어요."
+      },
+      {
+        "turn": 24,
+        "action": "EXAM",
+        "content": "ch_lung_auscultation",
+        "reply": "폐포음, 수포음(-/-), 천명음(-/-)"
+      },
+      {
+        "turn": 25,
+        "action": "EXAM",
+        "content": "bex_limb_power",
+        "reply": "상지 Gr.5/Gr.5, 하지 근위부 Gr.4/Gr.4"
+      },
+      {
+        "turn": 26,
+        "action": "SAY",
+        "content": "목이 답답하거나 삼키기 불편한가요?",
+        "reply": "목에 걸린 듯해도 삼키긴 괜찮아요."
+      },
+      {
+        "turn": 27,
+        "action": "SAY",
+        "content": "현재 임신 가능성이 있나요?",
+        "reply": "아니요, 최근 몇 달간 관계 없었어요."
+      },
+      {
+        "turn": 28,
+        "action": "EXAM",
+        "content": "bex_leg_pulse_edema",
+        "reply": "족배동맥(+/+), 함요부종(-/-)"
+      },
+      {
+        "turn": 29,
+        "action": "EXAM",
+        "content": "hn_thyroid_bruit",
+        "reply": "잡음(+/+)"
+      },
+      {
+        "turn": 30,
+        "action": "SAY",
+        "content": "물체가 두 개로 보인 적 있나요?",
+        "reply": "아니요, 두 개로 보이진 않아요."
+      },
+      {
+        "turn": 31,
+        "action": "SAY",
+        "content": "시력이 흐려지거나 떨어진 적이 있나요?",
+        "reply": "아니요, 시력은 괜찮아요."
+      },
+      {
+        "turn": 32,
+        "action": "EXAM",
+        "content": "목정맥 팽창 여부를 확인하겠습니다",
+        "reply": "경정맥 팽창(-/-)"
+      },
+      {
+        "turn": 33,
+        "action": "EXAM",
+        "content": "bex_dtr",
+        "reply": "슬개건 3+/3+, 아킬레스건 2+/2+"
+      },
+      {
+        "turn": 34,
+        "action": "SAY",
+        "content": "커피나 에너지음료를 자주 드시나요?",
+        "reply": "커피는 하루 한두 잔 마셔요."
+      },
+      {
+        "turn": 35,
+        "action": "SAY",
+        "content": "커피는 줄이시고, 그레이브스병이 의심됩니다.",
+        "reply": "네, 검사받아 보고 싶어요."
+      },
+      {
+        "turn": 36,
+        "action": "SAY",
+        "content": "눈 돌출·떨림이 있어 갑상샘검사로 확인할게요.",
+        "reply": "네, 검사받을게요."
+      },
+      {
+        "turn": 37,
+        "action": "SAY",
+        "content": "오늘 갑상샘 기능·항체와 심전도로 심장도 확인할게요.",
+        "reply": "네, 검사받을게요."
+      },
+      {
+        "turn": 38,
+        "action": "SAY",
+        "content": "24–48시간 내 검사·심장 결과를 확인할게요.",
+        "reply": "네, 결과 확인하러 올게요."
+      },
+      {
+        "turn": 39,
+        "action": "SAY",
+        "content": "가만히 있어도 숨참·흉통·실신 시 즉시 응급실로 가세요",
+        "reply": "네, 그러면 바로 응급실 갈게요."
+      }
+    ],
+    "stories": [
+      {
+        "cc": "체중 감소",
+        "onset": "3개월 전",
+        "hpi": "32세 여성. 최근 3개월 동안 다이어트나 운동 없이 체중이 56kg에서 7kg 감소해 현재 49kg이며, 평소 체중 변화가 거의 없어 걱정되어 내원함. 식욕은 오히려 증가함. 두세 달 전부터 움직일 때 숨이 차고 조금만 걸어도 힘들며 계단 오르기도 버거우나, 가만히 있거나 누우면 괜찮음. 가슴 통증, 어지럼증, 실신은 없음. 하루 두세 번 전보다 묽은 변을 봄. 두 달째 생리 양이 줄고 기간도 짧아짐. 눈이 뻑뻑하고 튀어나온 듯하며, 다리에 힘이 빠져 계단 오르기가 힘듦. 목에 걸린 듯한 느낌이 있으나 삼키기는 괜찮음. 최근 몇 달간 성관계 없다고 함.",
+        "medicine": "복용 중인 약 및 건강식품 없음",
+        "pmh_others": "앓거나 치료받은 병 없음. 약이나 음식 알레르기 없음.",
+        "fh_others": "어머니 갑상샘 저하증.",
+        "sh_others": "비흡연. 술은 한 달에 한두 번 가볍게 마심. 커피는 하루 한두 잔 마심.",
+        "ros_others": "식욕 증가(+), 두근거림(+), 손 떨림(+), 더위를 탐(+), 땀 증가(+), 묽은 변(+), 운동 시 숨참(+), 가슴 통증(-), 안정 시 숨참(-), 누우면 숨참(-), 어지럼증(-), 실신(-), 생리 양 및 기간 감소(+), 눈 뻑뻑함(+), 눈 돌출감(+), 다리 힘 빠짐(+), 삼킴 불편(-), 복시(-), 시력 저하(-)"
+      },
+      {
+        "cc": "체중 감소",
+        "onset": "3개월 전",
+        "hpi": "32세 여성. 최근 3개월간 다이어트나 운동 없이 체중이 약 56kg에서 49kg으로 7kg 감소하여 걱정됨. 식욕은 오히려 증가했고, 두근거림과 손 떨림, 더위 탐 및 발한 증가가 있음. 대변은 하루 2~3회로 전보다 묽음. 2~3개월 전부터 숨이 차며 조금만 걸어도 힘들고 계단 오르기도 버거우나, 가만히 있거나 누우면 괜찮고 가슴 통증, 어지럼, 실신은 없음. 두 달째 생리량이 줄고 기간도 짧아짐. 눈이 뻑뻑하고 약간 튀어나온 듯하며, 다리에 힘이 빠져 계단 오르기가 힘듦. 목에 걸린 듯한 느낌은 있으나 삼키기는 괜찮음. 체중 감소와 증상이 걱정되어 내원함.",
+        "medicine": "복용 중인 약 및 건강식품 없음.",
+        "pmh_others": "앓거나 치료받은 병 없음. 약물·음식 알레르기 없음.",
+        "fh_others": "어머니가 갑상샘 저하증임.",
+        "sh_others": "흡연 안 함. 술은 한 달에 1~2회 가볍게 마심. 커피는 하루 1~2잔 마심.",
+        "ros_others": "가슴 통증(-), 안정 시 호흡곤란(-), 누울 때 호흡곤란(-), 어지럼(-), 실신(-), 삼킴 불편(-), 복시(-), 시력 저하(-), 다리 힘 빠짐(+), 눈 뻑뻑함(+), 눈 돌출감(+)"
+      }
+    ],
+    "proposed_marks": {
+      "pmh_dm": {
+        "mark": "-",
+        "turn": 10,
+        "quote": "아니요, 앓거나 치료받은 병은 없어요."
+      },
+      "pmh_htn": {
+        "mark": "-",
+        "turn": 10,
+        "quote": "아니요, 앓거나 치료받은 병은 없어요."
+      },
+      "pmh_stroke": {
+        "mark": "-",
+        "turn": 10,
+        "quote": "아니요, 앓거나 치료받은 병은 없어요."
+      },
+      "pmh_tbc": {
+        "mark": "-",
+        "turn": 10,
+        "quote": "아니요, 앓거나 치료받은 병은 없어요."
+      },
+      "pmh_hepatitis": {
+        "mark": "-",
+        "turn": 10,
+        "quote": "아니요, 앓거나 치료받은 병은 없어요."
+      },
+      "pmh_heart": {
+        "mark": "-",
+        "turn": 10,
+        "quote": "아니요, 앓거나 치료받은 병은 없어요."
+      },
+      "pmh_dyslipidemia": {
+        "mark": "-",
+        "turn": 10,
+        "quote": "아니요, 앓거나 치료받은 병은 없어요."
+      },
+      "pmh_op": {
+        "mark": "",
+        "turn": "",
+        "quote": ""
+      },
+      "pmh_allergy": {
+        "mark": "-",
+        "turn": 14,
+        "quote": "아니요, 알레르기는 없어요."
+      },
+      "fh_dm": {
+        "mark": "",
+        "turn": "",
+        "quote": ""
+      },
+      "fh_htn": {
+        "mark": "",
+        "turn": "",
+        "quote": ""
+      },
+      "fh_stroke": {
+        "mark": "",
+        "turn": "",
+        "quote": ""
+      },
+      "sh_smoking": {
+        "mark": "-",
+        "turn": 15,
+        "quote": "아니요, 담배는 안 피워요."
+      },
+      "sh_alcohol": {
+        "mark": "+",
+        "turn": 18,
+        "quote": "한 달에 한두 번 가볍게 마셔요."
+      },
+      "ros_weakness": {
+        "mark": "+",
+        "turn": 23,
+        "quote": "네, 다리에 힘이 빠져 계단이 힘들어요."
+      },
+      "ros_fatigue": {
+        "mark": "",
+        "turn": "",
+        "quote": ""
+      },
+      "ros_headache": {
+        "mark": "",
+        "turn": "",
+        "quote": ""
+      },
+      "ros_dizziness": {
+        "mark": "-",
+        "turn": 9,
+        "quote": "어지럽거나 쓰러진 적은 없어요."
+      },
+      "ros_chest_pain": {
+        "mark": "-",
+        "turn": 5,
+        "quote": "가슴 통증 없고, 움직이면 숨차요."
+      },
+      "ros_palpitation": {
+        "mark": "+",
+        "turn": 2,
+        "quote": "네, 두근거리고 손도 떨려요."
+      },
+      "ros_fever": {
+        "mark": "",
+        "turn": "",
+        "quote": ""
+      },
+      "ros_chill": {
+        "mark": "",
+        "turn": "",
+        "quote": ""
+      },
+      "ros_cough": {
+        "mark": "",
+        "turn": "",
+        "quote": ""
+      },
+      "ros_sputum": {
+        "mark": "",
+        "turn": "",
+        "quote": ""
+      },
+      "ros_rhinorrhea": {
+        "mark": "",
+        "turn": "",
+        "quote": ""
+      },
+      "ros_abdominal_pain": {
+        "mark": "",
+        "turn": "",
+        "quote": ""
+      },
+      "ros_melena": {
+        "mark": "",
+        "turn": "",
+        "quote": ""
+      },
+      "ros_hematochezia": {
+        "mark": "",
+        "turn": "",
+        "quote": ""
+      },
+      "ros_hematemesis": {
+        "mark": "",
+        "turn": "",
+        "quote": ""
+      },
+      "ros_anorexia": {
+        "mark": "-",
+        "turn": 1,
+        "quote": "오히려 식욕이 더 좋아졌어요."
+      },
+      "ros_nausea": {
+        "mark": "",
+        "turn": "",
+        "quote": ""
+      },
+      "ros_vomiting": {
+        "mark": "",
+        "turn": "",
+        "quote": ""
+      },
+      "ros_diarrhea": {
+        "mark": "+",
+        "turn": 4,
+        "quote": "하루 두세 번, 전보다 묽게 봐요."
+      },
+      "ros_constipation": {
+        "mark": "",
+        "turn": "",
+        "quote": ""
+      },
+      "plan_update": null
+    },
+    "expected_valid_marks": {
+      "pmh_allergy": "-",
+      "sh_smoking": "-",
+      "sh_alcohol": "+",
+      "ros_weakness": "+",
+      "ros_dizziness": "-",
+      "ros_chest_pain": "-",
+      "ros_palpitation": "+",
+      "ros_anorexia": "-",
+      "ros_diarrhea": "+"
+    }
+  }
+]

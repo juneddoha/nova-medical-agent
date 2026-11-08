@@ -1,25 +1,23 @@
 {
-  "version": 1,
-  "note": "Two project-authored toy cases plus the organizer-provided SDK/build recipe. No external clinical dataset or model is bundled.",
+  "version": 2,
+  "note": "Active source release only. Organizer SDK/build recipe and teammate-derived agent are distinguished. Internal documents, archives, and prior MK2 are local-only. Public virtual regression fixtures are not runtime Doctor inputs.",
   "assets": [
-    {
-      "path": "simulator/sample_cases.json",
-      "origin": "Project-authored synthetic examples",
-      "license": "Project-owned; no external source material"
-    },
     {
       "path": "nova_sdk.py",
       "origin": "https://nova.snubhai.org/docs/starter.zip",
-      "version": "NOVA SDK 1.0.0; supplied 2026-10-10",
+      "version": "NOVA SDK 1.0.1; downloaded 2026-10-13",
       "license": "Organizer-provided competition starter; no separate license file in the supplied ZIP. Preserve source and follow competition terms.",
-      "sha256": "3233b4546722af7267f6652cdc6fce0712b56c12f7a9ebdc2a022e464239d045"
+      "sha256": "bb8828548d0c8d03749cc7cb537c4eed639200b2302784dae5bd6cf79a932e7d"
     },
     {
       "path": "local.Dockerfile",
       "origin": "https://nova.snubhai.org/docs/starter.zip",
       "version": "NOVA SDK 1.0.0; supplied 2026-10-10",
       "license": "Organizer-provided competition starter; no separate license file in the supplied ZIP. Preserve source and follow competition terms.",
-      "sha256": "a2a28d60ad0ce453030056cb4540355346176e3f3c74b26c73b513f02c5baf32"
+      "sha256": "3da0f757bbf93cd9ad1f9530977990ccb036420b5ec36474938ef7417dc1dd29",
+      "upstream_sha256": "a2a28d60ad0ce453030056cb4540355346176e3f3c74b26c73b513f02c5baf32",
+      "local_changes": "Derived from supplied build recipe; exclude local secrets, logs, transfer bundles and non-runtime material from Docker context (2026-11-08)."
     }
-  ]
+  ],
+  "agent_origin": "User-provided teammate v1b6 t40 r2 baseline with project improvements; original retained locally and not re-exported."
 }

@@ -1,0 +1,58 @@
+[
+  {
+    "turn": 1,
+    "action": "SAY",
+    "content": "잠을 못 주무신 건 언제부터인가요?",
+    "reply": "7년 전부터 잠을 못 잤어요.",
+    "purpose": "question",
+    "explain": false
+  },
+  {
+    "turn": 2,
+    "action": "SAY",
+    "content": "하룻밤에 실제 몇 시간 주무시나요?",
+    "reply": "약 먹고도 서너 시간쯤 자요.",
+    "purpose": "question",
+    "explain": false
+  },
+  {
+    "turn": 3,
+    "action": "SAY",
+    "content": "약을 안 드시면 몇 시간 주무시나요?",
+    "reply": "약 안 먹으면 한숨도 못 자요.",
+    "purpose": "question",
+    "explain": false
+  },
+  {
+    "turn": 4,
+    "action": "SAY",
+    "content": "현재 드시는 수면제 이름과 용량은 무엇인가요?",
+    "reply": "졸피뎀 10mg, 밤에 대여섯 알요.",
+    "purpose": "question",
+    "explain": false
+  },
+  {
+    "turn": 5,
+    "action": "SAY",
+    "content": "지금 졸리거나 의식이 흐린가요?",
+    "reply": "낮에도 좀 졸리고 멍해요.",
+    "purpose": "question",
+    "explain": false
+  },
+  {
+    "turn": 6,
+    "action": "SAY",
+    "content": "어젯밤 졸피뎀을 몇 시에 몇 알 드셨나요?",
+    "reply": "밤11시 4알, 새벽2~3시 2알요.",
+    "purpose": "question",
+    "explain": false
+  },
+  {
+    "turn": 7,
+    "action": "SAY",
+    "content": "지금 혼자 이동하지 말고 119를 부르세요.",
+    "reply": "네, 혼자 안 가고 119 부를게요.",
+    "purpose": "guidance",
+    "explain": false
+  }
+]

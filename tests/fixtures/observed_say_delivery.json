@@ -1,0 +1,36 @@
+{
+  "source": "Saved public C01 e09 turn 2, observed 2026-10-18; not model input",
+  "action_request": {
+    "request_id": "ddb5c893-e2bd-54bb-a791-26f59bd65a7f",
+    "action": "SAY",
+    "content": "잠들기 어렵나요, 자주 깨나요?"
+  },
+  "action_response": {
+    "status": "OK",
+    "content": "네, 약 없이는 잠들기 어려워요.",
+    "turn": 2,
+    "turns_remaining": 48
+  },
+  "session_response": {
+    "events": [
+      {
+        "id": "db487941-4fb7-50b1-9a2a-103522e3f354",
+        "action": "SAY",
+        "payload": {
+          "action": "SAY",
+          "content": "잠들기 어렵나요, 자주 깨나요?",
+          "request_id": "ddb5c893-e2bd-54bb-a791-26f59bd65a7f"
+        },
+        "effective_content": "잠들기 어렵나요,",
+        "response": {
+          "turn": 2,
+          "status": "OK",
+          "content": "네, 약 없이는 잠들기 어려워요.",
+          "turns_remaining": 48
+        },
+        "http_status": 200,
+        "turn": 2
+      }
+    ]
+  }
+}

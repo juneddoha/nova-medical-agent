@@ -1,0 +1,62 @@
+{
+  "date_kst": "2026-11-08",
+  "python": "3.13.14",
+  "platform": "Windows",
+  "revision": "e47-plus-postlive-C01-controller-boundaries",
+  "active_runtime_sha256": {
+    "run.py": "80f2fed4fc67428fc4ad804e54bd181aebe7a987f9953963f8b7cd8912caff1b",
+    "doctor.py": "c3fb1104c63e30471c6f3f90331d08edb19f3d1db57a1ec525125de4756196c9",
+    "explain.py": "73a9d242a46156556987bfd1ae9028846de3503878bf232a2917118c5c83893e",
+    "record.py": "e778413215337ddd0d9db11bfee9bfa34abdee8c634aa0d80534dcc28fa2e402",
+    "korean_numbers.py": "4a9a062738854a6d0d8d9b791d8d2e45425dc594f8dcc63fb58c650d09836686",
+    "nova_sdk.py": "bb8828548d0c8d03749cc7cb537c4eed639200b2302784dae5bd6cf79a932e7d",
+    "requirements.txt": "d2b2ed1aed141db4390d0e782a7fc25b97328de2828b70958d99c145ea1d0843"
+  },
+  "runtime_unchanged": true,
+  "preserved_teammate_baseline": "7/7 hashes match",
+  "publication_offline_suite": {
+    "tests": 161,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "network": "blocked",
+    "sdk_transport": "blocked",
+    "prepare": "passed",
+    "successful": true
+  },
+  "tests_per_module": {
+    "test_c01_closure": 24,
+    "test_c01_urgent_source": 15,
+    "test_care_coverage": 19,
+    "test_improvements": 12,
+    "test_interview": 4,
+    "test_live_regressions": 15,
+    "test_recovery": 14,
+    "test_remaining_e39": 22,
+    "test_semantic": 21,
+    "test_structural": 15
+  },
+  "offline_demo": {
+    "mode": "offline_mock",
+    "action": "SAY",
+    "content": "언제부터 잠들기 어려우셨나요?",
+    "unsupported_negative_rejected": true,
+    "doctor_mock_calls": 1
+  },
+  "syntax_check": "all published Python files parsed",
+  "json_check": "all published JSON files parsed",
+  "readme_links": "all local links resolve",
+  "environment_secret_matches": 0,
+  "privacy_transform": "internal documents and archives excluded; 3 fixture UUID occurrences replaced consistently",
+  "live_consultations_started": 0,
+  "competition_credits_used": false,
+  "unverified": [
+    "postlive revision on real server",
+    "clinical quality and score improvement",
+    "Python 3.12",
+    "Docker build"
+  ],
+  "known_limitations": [
+    "medication summary numeric validation can reject valid summaries and fall back to source text"
+  ]
+}
